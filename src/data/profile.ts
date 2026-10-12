@@ -183,14 +183,7 @@ export const profile = {
         href: 'https://www.familyfinhealth.com/',
         hrefLabel: '打開好理家在',
         role: todo('我負責的部分'),
-      },
-      {
-        id: 'accounting',
-        name: '台灣會計互動課程',
-        short: '零基礎也能懂借貸',
-        line: '零基礎也能懂借貸的互動課程。',
-        status: '即將公開',
-        role: todo('我負責的部分'),
+        tileFront: 'quiz',
       },
     ] satisfies Work[],
   },
@@ -402,7 +395,6 @@ export const profile = {
     resources: [
       { name: 'Codex 行政工作實驗課', desc: '90 分鐘入門實作課：用安全的範例練習整理資料、檢查缺漏、產出草稿', status: '已上線', href: 'https://course-ops-automation-requirements.vercel.app/' },
       { name: 'VLC 轉 MP3 教學', desc: '給沒有 IT 背景的人：7 個步驟把錄影轉成 MP3', status: '已上線', href: 'https://vlc-recording-to-mp3-guide.vercel.app/' },
-      { name: '台灣會計互動課程', desc: '零基礎也能懂借貸的互動課程', status: '已上線', href: todo('會計課程網址') },
     ] satisfies Resource[],
     cta: '我也想學',
   },

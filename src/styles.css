@@ -648,10 +648,11 @@ p {
   background: var(--tint);
 }
 
+/* 兩張卡並排：貧窮地圖稍寬；視窗變窄時卡片跟著變矮，前後兩張畫面才會一直疊在一起 */
 .bento {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-  grid-template-rows: 330px 330px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  grid-template-rows: clamp(460px, 42vw, 560px);
   gap: clamp(14px, 1.6vw, 20px);
 }
 
@@ -787,9 +788,26 @@ p {
   transform: translateY(-6px);
 }
 
+/* 前面那張畫面疊在右下角，滑鼠移上去時往前浮一點 */
+.shot-front {
+  right: 18px;
+  bottom: 22px;
+  width: 58%;
+}
+
+.tile:hover .shot-front {
+  transform: translate(-8px, -10px);
+}
+
+/* 電腦版的中格比較窄，前面那張放大一點，才疊得到後面那張 */
+@media (min-width: 960px) {
+  .tile-md .shot-front {
+    width: 64%;
+  }
+}
+
 /* 大格：台灣貧窮地圖。深海色底，全台立體圖在後、拉近到花蓮的找資源畫面疊在前 */
 .tile-lg {
-  grid-row: span 2;
   background: radial-gradient(120% 90% at 85% 100%, #1d5a5b 0%, #12343b 48%, #0f1e21 100%);
   color: #fff;
 }
@@ -829,22 +847,6 @@ p {
   width: 54%;
 }
 
-.tile-lg:hover .shot-front {
-  transform: translate(-8px, -10px);
-}
-
-.tile-sm .tile-media {
-  display: grid;
-  place-items: center;
-  margin: 0 18px 18px;
-  border-radius: 16px;
-  background: var(--yolk-soft);
-}
-
-.tile-sm .ledger-art {
-  width: min(320px, 92%);
-}
-
 /* 整張卡都能點；右上角的＋告訴大家點了會展開 */
 .tile-hit {
   position: absolute;
@@ -881,43 +883,6 @@ p {
 
 .tile:hover .tile-plus {
   transform: rotate(90deg) scale(1.06);
-}
-
-.ledger-art {
-  width: 100%;
-  height: auto;
-}
-
-.la-page {
-  fill: var(--card);
-  stroke: var(--line);
-  stroke-width: 2;
-}
-
-.la-spine {
-  stroke: var(--line);
-  stroke-width: 2;
-}
-
-.la-head {
-  fill: var(--sea);
-  font-family: var(--font-display);
-  font-size: 18px;
-  text-anchor: middle;
-}
-
-.la-line {
-  fill: var(--sea-soft);
-}
-
-.la-coin {
-  fill: var(--yolk);
-}
-
-.la-coin-mark {
-  stroke: #fff3d6;
-  stroke-width: 3;
-  stroke-linecap: round;
 }
 
 /* ───────── 面板（點開之後的第二層） ───────── */
@@ -1094,10 +1059,6 @@ p {
 
 .view-art {
   background: var(--yolk-soft);
-}
-
-.view-art .ledger-art {
-  width: min(520px, 90%);
 }
 
 .sheet-sprout {
@@ -3064,7 +3025,7 @@ p {
   .metric:hover,
   .story-card:hover,
   .tile:hover .shot-back,
-  .tile-lg:hover .shot-front,
+  .tile:hover .shot-front,
   .story-card:hover .story-photo img {
     transform: none;
   }
@@ -3085,8 +3046,17 @@ p {
   }
 
   .bento {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: 600px 320px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .tile-media {
+    flex: none;
+    height: 400px;
+  }
+
+  .tile-md .tile-media {
+    height: 360px;
   }
 
   .next-grid {
@@ -3112,10 +3082,6 @@ p {
     margin-top: -9px;
   }
 
-  .tile-lg {
-    grid-column: 1 / -1;
-    grid-row: auto;
-  }
 }
 
 /* ───────── 手機 ───────── */
@@ -3244,9 +3210,8 @@ p {
     height: 290px;
   }
 
-  .tile-sm .tile-media {
-    height: 170px;
-    margin: 0 14px 14px;
+  .tile-md .tile-media {
+    height: 250px;
   }
 
   .shot-back,
@@ -3255,6 +3220,7 @@ p {
     right: 20px;
   }
 
+  .shot-front,
   .tile-lg .shot-front {
     right: 14px;
     bottom: 18px;

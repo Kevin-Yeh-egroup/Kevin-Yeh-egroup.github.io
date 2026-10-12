@@ -11,7 +11,7 @@ import { filled, visible } from '../lib/todo'
 // 作品：第一層只有名字、一句話和真實畫面；點開才看細節、切換畫面、連結
 export function Works() {
   const { works } = profile
-  const [map, familyfin, accounting] = works.items
+  const [map, familyfin] = works.items
   return (
     <section id="works" className="section works" aria-labelledby="works-title">
       <div className="wrap">
@@ -22,7 +22,6 @@ export function Works() {
         <div className="bento">
           <WorkTile work={map} size="lg" badge="7,794 個村里" />
           <WorkTile work={familyfin} size="md" award />
-          <WorkTile work={accounting} size="sm" />
         </div>
       </div>
       {works.items.map((w) => (
@@ -41,7 +40,7 @@ function Shot({ view, className, sizes }: { view: WorkView; className: string; s
   )
 }
 
-function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md' | 'sm'; badge?: string; award?: boolean }) {
+function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md'; badge?: string; award?: boolean }) {
   const openIt = useOpenSheet('work-' + work.id)
   const back = work.views?.[0]
   const front = work.views?.find((v) => v.id === work.tileFront)
@@ -64,14 +63,8 @@ function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md' 
         ) : null}
       </div>
       <div className="tile-media" data-morph>
-        {back ? (
-          <>
-            <Shot view={back} className="shot-back" sizes={size === 'lg' ? '(max-width: 959px) 88vw, 640px' : '(max-width: 959px) 88vw, 410px'} />
-            {front ? <Shot view={front} className="shot-front" sizes="(max-width: 959px) 56vw, 380px" /> : null}
-          </>
-        ) : (
-          <LedgerArt />
-        )}
+        {back ? <Shot view={back} className="shot-back" sizes={size === 'lg' ? '(max-width: 959px) 88vw, 640px' : '(max-width: 959px) 88vw, 420px'} /> : null}
+        {front ? <Shot view={front} className="shot-front" sizes="(max-width: 959px) 56vw, 380px" /> : null}
       </div>
       <button type="button" className="tile-hit" onClick={openIt} aria-label={`看${work.name}的介紹`}>
         <span className="tile-plus" aria-hidden="true">
@@ -89,24 +82,18 @@ function WorkSheet({ work }: { work: Work }) {
   return (
     <Sheet id={'work-' + work.id} label={work.name}>
       <div className="sheet-media" data-morph-target>
-        {views.length ? (
-          views.map((v) => (
-            <div
-              key={v.id}
-              role={views.length > 1 ? 'tabpanel' : undefined}
-              id={`${idBase}-${v.id}-panel`}
-              aria-labelledby={views.length > 1 ? `${idBase}-${v.id}-tab` : undefined}
-              aria-hidden={v.id !== view}
-              className={`view ${v.id === view ? 'is-on' : ''}`}
-            >
-              <Picture base={v.image} widths={v.widths} sizes="(max-width: 719px) 100vw, 880px" alt={v.alt} width={v.width} height={v.height} />
-            </div>
-          ))
-        ) : (
-          <div className="view is-on view-art">
-            <LedgerArt />
+        {views.map((v) => (
+          <div
+            key={v.id}
+            role={views.length > 1 ? 'tabpanel' : undefined}
+            id={`${idBase}-${v.id}-panel`}
+            aria-labelledby={views.length > 1 ? `${idBase}-${v.id}-tab` : undefined}
+            aria-hidden={v.id !== view}
+            className={`view ${v.id === view ? 'is-on' : ''}`}
+          >
+            <Picture base={v.image} widths={v.widths} sizes="(max-width: 719px) 100vw, 880px" alt={v.alt} width={v.width} height={v.height} />
           </div>
-        )}
+        ))}
       </div>
       <div className="sheet-body">
         {views.length > 1 ? (
@@ -162,25 +149,5 @@ function WorkSheet({ work }: { work: Work }) {
         ) : null}
       </div>
     </Sheet>
-  )
-}
-
-// 會計課程還沒公開，先用插圖：帳本左借右貸
-function LedgerArt() {
-  return (
-    <svg className="ledger-art" viewBox="0 0 320 180" aria-hidden="true" focusable="false">
-      <rect x="40" y="26" width="240" height="132" rx="14" className="la-page" />
-      <path d="M160 34 V150" className="la-spine" />
-      <text x="100" y="58" className="la-head">借</text>
-      <text x="220" y="58" className="la-head">貸</text>
-      {[0, 1, 2].map((i) => (
-        <g key={i}>
-          <rect x={66} y={74 + i * 22} width={i === 1 ? 52 : 70} height={9} rx={4.5} className="la-line" />
-          <rect x={186} y={74 + i * 22} width={i === 2 ? 50 : 70} height={9} rx={4.5} className="la-line" />
-        </g>
-      ))}
-      <circle cx="262" cy="40" r="20" className="la-coin" />
-      <path d="M254 40 H270 M262 32 V48" className="la-coin-mark" />
-    </svg>
   )
 }
