@@ -8,12 +8,21 @@ const require = createRequire(import.meta.url)
 const fontkit = require('fontkit')
 const root = new URL('../', import.meta.url)
 const read = (path) => readFileSync(new URL(path, root), 'utf8')
-const list = (dir) => readdirSync(new URL(dir, root)).map((name) => dir + name)
+// 找出資料夾裡（含子資料夾）檔名符合 pattern 的檔案
+const walk = (dir, pattern) =>
+  readdirSync(new URL(dir, root), { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory() ? walk(`${dir}${d.name}/`, pattern) : pattern.test(d.name) ? [dir + d.name] : [],
+  )
 const pkg = 'node_modules/@fontsource/huninn/'
 
-// 1. 收集網站上可能出現的字：資料檔和所有元件裡的文字
-const sources = ['src/data/profile.ts', 'src/App.tsx', ...list('src/sections/'), ...list('src/components/')]
-const chars = [...new Set(sources.map(read).join(''))].filter((c) => c.codePointAt(0) >= 0x20).sort()
+// 1. 收集網站上可能出現的字：src 底下所有程式與資料檔裡的文字（註解不會出現在網頁上，先拿掉）
+const ts = require('typescript')
+const stripComments = (code) =>
+  ts.transpileModule(code, { compilerOptions: { removeComments: true, jsx: ts.JsxEmit.Preserve, target: ts.ScriptTarget.ESNext } }).outputText
+const code = walk('src/', /\.tsx?$/).map((f) => stripComments(read(f)))
+// CSS 裡用 content: '…' 畫出來的字（例如分隔用的「・」）也要算進去
+const cssContent = walk('src/', /\.css$/).flatMap((f) => [...read(f).matchAll(/content:\s*'([^']*)'/g)].map((m) => m[1]))
+const chars = [...new Set([...code, ...cssContent].join(''))].filter((c) => c.codePointAt(0) >= 0x20).sort()
 
 // 2. 主字型檔（繁中字集）有的字先放一起
 const mainBuf = readFileSync(new URL(pkg + 'files/huninn-chinese-traditional-400-normal.woff2', root))
