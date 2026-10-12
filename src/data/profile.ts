@@ -27,7 +27,7 @@ export type Metric = {
 }
 
 export type Chapter = 'learn' | 'apply' | 'teach'
-export type IconKind = 'cap' | 'shield' | 'laptop' | 'egg' | 'book' | 'heart' | 'people' | 'sprout'
+export type IconKind = 'cap' | 'shield' | 'laptop' | 'egg' | 'book' | 'heart' | 'people' | 'sprout' | 'chat' | 'map' | 'mic'
 
 // 經歷只寫一次：「我走過的路」、點開的面板、「完整經歷」都從這裡產生
 export type LifeEvent = {
@@ -64,6 +64,18 @@ export type Work = {
   // 作品卡片上疊在前面的第二張畫面（views 裡的 id）
   tileFront?: string
 }
+
+// 接下來：工作的四個步驟、證據、想做的事
+// visual：說明卡下方的小圖（chips 一排標籤、reply 回覆的樣子、proof 證據時間線、flow 一直改下去的流程）
+export type NextStep = {
+  id: string
+  name: string
+  short: string
+  text: string
+  icon: IconKind
+  visual: { kind: 'chips' | 'reply' | 'proof' | 'flow'; title: string; items: string[] }
+}
+export type NextGoal = { id: string; name: string; line: string; icon: IconKind; target?: string }
 
 export type Teaching = { who: Text; topic: string; how: Text; when: Text }
 export type Resource = { name: string; desc: string; status: string; href?: Text }
@@ -296,6 +308,71 @@ export const profile = {
     ] satisfies LifeEvent[],
   },
 
+  // 來源：葉先博在 2026 年 10 月月會分享的未來展望與規劃
+  next: {
+    title: '成為找到關鍵問題的 FDE。',
+    line: '走進現場聽懂真正的需要，用 AI 很快做出來，讓大家馬上看到、馬上回饋。',
+    center: { value: '1 週', label: '從需求到原型' },
+    fde: {
+      button: 'FDE 是什麼？',
+      term: 'Forward Deployed Engineer',
+      title: '走進現場的工程師',
+      text: '走進使用者的現場，聽懂真正的需要、結合手邊的資源，直接把解法做出來，再跟著回饋一起改。',
+      reflection: '九月開始，我用這種方式和服務對象、合作夥伴一起做事。一開始常常只先做到最基本的需求；接下來要更深入，找到大家真正想要的，才能真的幫上忙。',
+    },
+    stepsLabel: '工作的四個步驟',
+    steps: [
+      {
+        id: 'listen',
+        name: '聽懂',
+        short: '走進現場找痛點',
+        icon: 'people',
+        text: '不只做到最基本的需求。先了解每個關係人的痛點和想做的事，再找出現有的資源和幫得上忙的方法。',
+        visual: { kind: 'chips', title: '要聽懂的人', items: ['服務對象', '社工', '合作夥伴', '願意出力的人'] },
+      },
+      {
+        id: 'reply',
+        name: '回覆',
+        short: '很快說清楚怎麼做',
+        icon: 'chat',
+        text: '有 AI 同事一起工作，收到需求後很快就回覆對方：預計怎麼做、什麼時候好。',
+        visual: { kind: 'reply', title: '收到需求，先回覆這兩件事', items: ['預計怎麼做', '預計什麼時候好'] },
+      },
+      {
+        id: 'prototype',
+        name: '原型',
+        short: '一週做出來',
+        icon: 'laptop',
+        text: '新的 NPO 夥伴，收集完需求後一週內做出原型，直接用畫面討論要做什麼。',
+        visual: { kind: 'proof', title: '', items: [] },
+      },
+      {
+        id: 'feedback',
+        name: '回饋',
+        short: '馬上改、記錄成效',
+        icon: 'sprout',
+        text: '每個解法都讓夥伴可以直接回饋；收到就改，記錄成效，再告訴大家目前的成果。',
+        visual: { kind: 'flow', title: '一直改下去', items: ['夥伴回饋', '馬上改', '記錄成效', '告訴大家成果'] },
+      },
+    ] satisfies NextStep[],
+    proof: {
+      title: '一個社福團體：從聽需求到上線，不到一個月',
+      points: [
+        { when: '9/7', what: '聽需求：會議錄音、Excel 表格' },
+        { when: '一週內', what: '做出可以操作的示範網站' },
+        { when: '9 月底', what: '正式上線' },
+        { when: '10/1', what: '交付正式測試網站' },
+      ],
+      source: { label: '葉先博，2026 年 10 月月會' },
+    },
+    goalsTitle: '接下來想做的事',
+    goals: [
+      { id: 'familyfin', name: '好理家在', icon: 'heart', line: '讓助人者更好用、更願意用，也讓願意出力的人看得見、幫得上', target: 'sheet:work-familyfin' },
+      { id: 'map', name: '台灣貧窮地圖', icon: 'map', line: '和更多 NPO 合作，把各地的資源放上地圖', target: 'sheet:work-map' },
+      { id: 'voice', name: '社工的錄音', icon: 'mic', line: '錄音轉成文字後自動整理進個案資料，之後讓更多 NPO 也能用' },
+    ] satisfies NextGoal[],
+  },
+
   motto: {
     label: '我的座右銘',
     big: '沒有解決不了的問題，',
@@ -323,9 +400,9 @@ export const profile = {
       { who: todo('對象'), topic: 'vibe coding 入門', how: todo('形式'), when: todo('時間或次數') },
     ] satisfies Teaching[],
     resources: [
-      { name: 'Codex 真實案例學習站', desc: '用真實的 Codex 操作案例做成的學習網站', status: '已上線', href: todo('連結（確認能公開）') },
-      { name: 'VLC 轉 MP3 教學', desc: '一步一步的圖文教學，照著做就會', status: '已上線', href: todo('連結（確認能公開）') },
-      { name: '台灣會計互動課程', desc: '零基礎也能懂借貸的互動課程', status: '即將公開' },
+      { name: 'Codex 行政工作實驗課', desc: '90 分鐘入門實作課：用安全的範例練習整理資料、檢查缺漏、產出草稿', status: '已上線', href: 'https://course-ops-automation-requirements.vercel.app/' },
+      { name: 'VLC 轉 MP3 教學', desc: '給沒有 IT 背景的人：7 個步驟把錄影轉成 MP3', status: '已上線', href: 'https://vlc-recording-to-mp3-guide.vercel.app/' },
+      { name: '台灣會計互動課程', desc: '零基礎也能懂借貸的互動課程', status: '已上線', href: todo('會計課程網址') },
     ] satisfies Resource[],
     cta: '我也想學',
   },

@@ -31,7 +31,7 @@ npm run dev
 | 檔案 | 用途 |
 | --- | --- |
 | `src/data/profile.ts` | 網站上所有文字、數字（含出處）、連結、圖片設定 |
-| `src/sections/` | 每一個區塊的版面：首屏、作品、走過的路、座右銘、一起學、換你了 |
+| `src/sections/` | 每一個區塊的版面：首屏、作品、走過的路、接下來、座右銘、一起學、換你了 |
 | `src/components/Sheet.tsx` | 點開才看的面板（電腦置中、手機從下面滑上來） |
 | `src/components/Segmented.tsx` | 分段切換（一次只看一種內容） |
 | `src/lib/` | 動態和面板共用的小工具 |

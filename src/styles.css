@@ -1655,6 +1655,14 @@ p {
   stroke: var(--card);
 }
 
+.i-white-flat {
+  fill: #ffffff;
+}
+
+.i-ink-line {
+  stroke: #3b2a06;
+}
+
 /* 會長出來的新芽 */
 .sprout-stem {
   fill: none;
@@ -1678,6 +1686,545 @@ p {
 
 .sprout-bud {
   transform-origin: 48px 54px;
+}
+
+/* ───────── 接下來 ───────── */
+.next {
+  background: var(--tint);
+}
+
+.fde-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--yolk-soft);
+  color: var(--on-yolk);
+  font-family: var(--font-display);
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-spring);
+}
+
+:root[data-theme='dark'] .fde-chip {
+  color: var(--yolk);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .fde-chip {
+    color: var(--yolk);
+  }
+}
+
+.fde-chip:hover {
+  transform: scale(1.04);
+}
+
+.fde-chip:active {
+  transform: scale(0.97);
+}
+
+.next-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+
+/* 四個步驟圍成一圈：圈線、繞圈的黃點、中間的數字、四顆按鈕 */
+.loop {
+  position: relative;
+  width: min(440px, 100%);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.loop-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.loop-track,
+.loop-draw {
+  fill: none;
+  stroke-width: 1.3;
+}
+
+.loop-track {
+  stroke: var(--line);
+}
+
+.loop-draw {
+  stroke: var(--sea);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.loop-orbit {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--turn));
+  transition: transform 0.7s var(--ease-spring);
+  pointer-events: none;
+}
+
+.loop-dot {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--yolk);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--yolk) 28%, transparent);
+}
+
+.loop-center {
+  position: absolute;
+  inset: 27%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+}
+
+.loop-value {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.4vw, 60px);
+  line-height: 1.1;
+  color: var(--sea-strong);
+}
+
+.loop-label {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.loop-node {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 24%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--sea-strong);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 22px);
+  box-shadow:
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+  cursor: pointer;
+  transition:
+    scale 0.35s var(--ease-spring),
+    background-color 0.3s,
+    color 0.3s,
+    box-shadow 0.3s;
+}
+
+.loop-node:hover {
+  scale: 1.06;
+}
+
+.loop-node:active {
+  scale: 0.95;
+}
+
+.loop-node[aria-selected='true'] {
+  background: var(--sea);
+  color: var(--on-sea);
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--yolk) 70%, transparent),
+    var(--shadow-2);
+}
+
+.loop-node-0 {
+  left: 50%;
+  top: 12%;
+}
+
+.loop-node-1 {
+  left: 88%;
+  top: 50%;
+}
+
+.loop-node-2 {
+  left: 50%;
+  top: 88%;
+}
+
+.loop-node-3 {
+  left: 12%;
+  top: 50%;
+}
+
+/* 選中那一步的說明卡 */
+.step-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 480px;
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+  animation: panel-in 0.35s var(--ease-out);
+}
+
+.step-count {
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.step-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 20px;
+  background: var(--tint);
+}
+
+.step-title h3 {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(26px, 2.8vw, 32px);
+  line-height: 1.2;
+}
+
+.step-title h3 span {
+  margin-top: 4px;
+  color: var(--sea);
+  font-size: 16px;
+}
+
+.step-text {
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+/* 證據時間線與其他小圖共用的底 */
+.proof,
+.step-visual {
+  margin: 4px 0 0;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--tint);
+}
+
+.proof figcaption,
+.step-visual figcaption {
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+
+.visual-chips,
+.visual-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.visual-chips li {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--sea-strong);
+  font-family: var(--font-display);
+  font-size: 16px;
+  box-shadow: 0 0 0 1px var(--hairline);
+}
+
+.visual-reply {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 16px 16px 16px 6px;
+  background: var(--card);
+  box-shadow: 0 0 0 1px var(--hairline);
+}
+
+.visual-reply p {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.reply-check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--sea);
+  color: var(--on-sea);
+}
+
+.reply-label {
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+
+.reply-line {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--sea-soft);
+}
+
+.visual-flow {
+  counter-reset: flow;
+}
+
+.visual-flow li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+
+.visual-flow li::before {
+  counter-increment: flow;
+  content: counter(flow);
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--yolk);
+  color: var(--on-yolk);
+  font-size: 14px;
+}
+
+.visual-flow li:not(:last-child)::after {
+  content: '→';
+  color: var(--muted);
+}
+
+/* 最後一步接回第一步：一直改下去 */
+.flow-again {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--sea);
+  font-size: 14px;
+}
+
+.proof-track {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proof-track::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.proof-track li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.6em minmax(0, 1fr);
+  gap: 10px;
+  padding-left: 24px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.proof-track li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.32em;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sea);
+  box-shadow: 0 0 0 3px var(--tint);
+}
+
+/* 「一週內」是重點，用蛋黃色標出來 */
+.proof-track li:nth-child(2)::before {
+  background: var(--yolk);
+}
+
+.proof-track li:nth-child(2) .proof-when {
+  color: var(--on-yolk);
+  background: var(--yolk-soft);
+  border-radius: 6px;
+  padding: 0 6px;
+  justify-self: start;
+}
+
+:root[data-theme='dark'] .proof-track li:nth-child(2) .proof-when {
+  color: var(--yolk);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .proof-track li:nth-child(2) .proof-when {
+    color: var(--yolk);
+  }
+}
+
+.proof-when {
+  color: var(--sea);
+  font-family: var(--font-display);
+}
+
+.proof-source {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* 接下來想做的事 */
+.goals {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.goals-title {
+  margin-bottom: 16px;
+  font-size: var(--fs-h3);
+}
+
+.goal-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.goal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  padding: 20px 22px 22px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow:
+    0 0 0 1px var(--hairline),
+    var(--shadow-1);
+  font: inherit;
+  text-align: left;
+}
+
+.goal-link {
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out);
+}
+
+.goal-link:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px var(--hairline),
+    var(--shadow-2);
+}
+
+.goal-link:active {
+  transform: scale(0.98);
+}
+
+.goal-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  border-radius: 18px;
+  background: var(--tint);
+}
+
+.goal-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goal-name {
+  font-family: var(--font-display);
+  font-size: 19px;
+}
+
+.goal-line {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.goal-arrow {
+  position: absolute;
+  right: 18px;
+  top: 20px;
+  color: var(--sea);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.goal-link:hover .goal-arrow {
+  transform: translateX(4px);
+}
+
+/* FDE 面板的大字 */
+.art-fde {
+  background: radial-gradient(120% 120% at 20% 0%, #1b4a50 0%, #12343b 45%, #0f1e21 100%);
+}
+
+.fde-big {
+  color: var(--yolk);
+  font-family: var(--font-display);
+  font-size: clamp(80px, 14vw, 150px);
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 /* ───────── 座右銘 ───────── */
@@ -2318,6 +2865,15 @@ p {
     animation: cue 2.4s 1.6s ease-in-out infinite;
   }
 
+  /* 證據時間線和小圖：一個一個出現 */
+  .proof-track li,
+  .visual-chips li,
+  .visual-reply p,
+  .visual-flow li {
+    animation: rise-in 0.45s var(--ease-out) backwards;
+    animation-delay: calc(0.15s + var(--k) * 0.09s);
+  }
+
   @keyframes cue {
     0%,
     100% {
@@ -2389,6 +2945,55 @@ p {
       animation-range: entry 100% cover 38%;
     }
 
+    /* 接下來：圈線跟著捲動畫出來，四顆按鈕依序冒出 */
+    .loop {
+      view-timeline-name: --loop;
+    }
+
+    .loop-draw {
+      animation: ring-draw linear both;
+      animation-timeline: --loop;
+      animation-range: entry 25% cover 45%;
+    }
+
+    @keyframes ring-draw {
+      from {
+        stroke-dashoffset: 100;
+      }
+    }
+
+    .loop-node {
+      animation: loop-pop linear both;
+      animation-timeline: --loop;
+    }
+
+    .loop-node-0 {
+      animation-range: entry 30% cover 30%;
+    }
+
+    .loop-node-1 {
+      animation-range: entry 45% cover 34%;
+    }
+
+    .loop-node-2 {
+      animation-range: entry 60% cover 38%;
+    }
+
+    .loop-node-3 {
+      animation-range: entry 75% cover 42%;
+    }
+
+    @keyframes loop-pop {
+      from {
+        opacity: 0;
+        scale: 0.6;
+      }
+
+      70% {
+        scale: 1.06;
+      }
+    }
+
     /* 作品卡片進場：輕輕浮上來 */
     .tile {
       animation: tile-in linear both;
@@ -2450,6 +3055,7 @@ p {
 
   .seg-thumb,
   .nav-thumb,
+  .loop-orbit,
   .view {
     transition-duration: 0.01s;
   }
@@ -2481,6 +3087,29 @@ p {
   .bento {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: 600px 320px;
+  }
+
+  .next-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .step-card {
+    min-height: 0;
+  }
+
+  .goal-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goal {
+    flex-direction: row;
+    align-items: center;
+    padding-right: 52px;
+  }
+
+  .goal-arrow {
+    top: 50%;
+    margin-top: -9px;
   }
 
   .tile-lg {
@@ -2630,6 +3259,14 @@ p {
     right: 14px;
     bottom: 18px;
     width: 60%;
+  }
+
+  .loop {
+    width: min(330px, 100%);
+  }
+
+  .loop-node {
+    font-size: 17px;
   }
 
   .motto-quote {
