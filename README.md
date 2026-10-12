@@ -30,15 +30,21 @@ npm run dev
 
 | 檔案 | 用途 |
 | --- | --- |
-| `src/data/profile.ts` | 網站上所有文字、連結、照片設定 |
-| `src/sections/` | 每一個區塊的版面（首屏、我走過的路、一起學、作品、關於我、經歷與證照、聯絡） |
-| `src/styles.css` | 顏色、字體、間距 |
-| `public/images/` | 照片 |
+| `src/data/profile.ts` | 網站上所有文字、數字（含出處）、連結、圖片設定 |
+| `src/sections/` | 每一個區塊的版面：首屏、作品、走過的路、座右銘、一起學、換你了 |
+| `src/components/Sheet.tsx` | 點開才看的面板（電腦置中、手機從下面滑上來） |
+| `src/components/Segmented.tsx` | 分段切換（一次只看一種內容） |
+| `src/lib/` | 動態和面板共用的小工具 |
+| `src/styles.css` | 顏色、字體、間距、動態 |
+| `public/images/` | 照片、作品畫面（WebP，三種寬度） |
+| `public/video/` | 2 分鐘介紹影片（橫式、直式）和封面 |
+| `public/og-image.jpg` | 分享到 LINE、Facebook 時顯示的圖 |
 | `brand/` | 新芽 Y 標誌的正式檔（SVG、PNG、動態版），規則寫在 DESIGN.md |
 | `public/favicon.svg` 等 | 瀏覽器分頁、手機主畫面用的小圖示 |
 | `scripts/build-font.mjs` | 把粉圓體縮小成只含網站用到的字 |
 | `scripts/list-todos.mjs` | 列出還沒補的內容 |
 | `.github/workflows/deploy.yml` | 自動發布的設定 |
+| `docs/screenshots/` | 驗收用的截圖和操作影片 |
 
 ## 其他指令
 

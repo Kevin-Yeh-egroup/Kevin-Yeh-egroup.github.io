@@ -6,6 +6,8 @@ const lines = source.split('\n')
 const found = []
 
 lines.forEach((line, index) => {
+  // 註解裡的說明文字不算
+  if (line.trim().startsWith('//')) return
   for (const match of line.matchAll(/todo\('([^']+)'\)/g)) {
     found.push({ line: index + 1, what: match[1] })
   }
