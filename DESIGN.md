@@ -36,7 +36,8 @@
 
 - 標題、名字、卡片標題：粉圓體（Huninn，justfont 開源字型，OFL 授權）。
 - 內文：系統字（蘋方、思源黑體、微軟正黑體），讀起來最清楚。
-- 粉圓體只收錄網站用到的字。`npm run dev`、`npm run build` 會自動執行 `scripts/build-font.mjs` 重新產生，大約 80 KB。
+- 粉圓體只收錄網站用到的字。`npm run dev`、`npm run build` 會自動執行 `scripts/build-font.mjs` 重新產生，大約 90 KB。
+- 粉圓體的繁中字型檔少了幾個全形標點（「，」「：」「？」等），程式會從同一套字型的其他檔案補上，標點才不會變成別的字體。
 
 ## 版面
 
