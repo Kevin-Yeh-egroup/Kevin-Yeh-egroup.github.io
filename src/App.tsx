@@ -1,3 +1,4 @@
+import { LogoMark } from './components/LogoMark'
 import { profile } from './data/profile'
 import { About } from './sections/About'
 import { Contact } from './sections/Contact'
@@ -26,7 +27,10 @@ export default function App() {
       <header id="top" className="site-header">
         <div className="wrap header-inner">
           <a className="brand" href="#top">
-            {profile.name} {profile.nameEn}
+            <LogoMark className="brand-mark" />
+            <span>
+              {profile.name} {profile.nameEn}
+            </span>
           </a>
           <nav className="nav" aria-label="主要選單">
             {navItems.map((item) => (

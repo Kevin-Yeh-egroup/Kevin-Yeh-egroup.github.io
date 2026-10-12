@@ -231,11 +231,54 @@ p {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 20px;
   text-decoration: none;
   white-space: nowrap;
+}
+
+/* 新芽 Y 標誌：滑鼠移上去或用鍵盤選到時，大葉子輕輕晃一下 */
+.brand-mark {
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+
+.logo-stem {
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.logo-leaf {
+  fill: var(--sea);
+  transform-origin: 52px 52px;
+}
+
+.logo-sprout {
+  fill: var(--yolk);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand:hover .logo-leaf,
+  .brand:focus-visible .logo-leaf {
+    animation: leaf-sway 0.7s ease-in-out;
+  }
+}
+
+@keyframes leaf-sway {
+  35% {
+    transform: rotate(-8deg);
+  }
+
+  70% {
+    transform: rotate(3deg);
+  }
 }
 
 .nav {

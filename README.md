@@ -34,6 +34,8 @@ npm run dev
 | `src/sections/` | 每一個區塊的版面（首屏、我走過的路、一起學、作品、關於我、經歷與證照、聯絡） |
 | `src/styles.css` | 顏色、字體、間距 |
 | `public/images/` | 照片 |
+| `brand/` | 新芽 Y 標誌的正式檔（SVG、PNG、動態版），規則寫在 DESIGN.md |
+| `public/favicon.svg` 等 | 瀏覽器分頁、手機主畫面用的小圖示 |
 | `scripts/build-font.mjs` | 把粉圓體縮小成只含網站用到的字 |
 | `scripts/list-todos.mjs` | 列出還沒補的內容 |
 | `.github/workflows/deploy.yml` | 自動發布的設定 |
