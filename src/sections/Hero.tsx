@@ -71,7 +71,7 @@ function MetricCard({ m }: { m: Metric }) {
   )
 }
 
-// 照片卡：看得到本人；點下去就是 2 分鐘的故事影片
+// 照片卡：看得到本人；點下去就是 2 分半的故事影片
 function StoryCard() {
   const { open } = useSheet()
   const { video, photo } = profile
