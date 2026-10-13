@@ -8,6 +8,7 @@ import { Hero } from './sections/Hero'
 import { Journey } from './sections/Journey'
 import { Learn } from './sections/Learn'
 import { Motto } from './sections/Motto'
+import { Next } from './sections/Next'
 import { Works } from './sections/Works'
 
 const year = new Date().getFullYear()
@@ -20,7 +21,9 @@ const navItems = [
 ]
 
 export default function App() {
-  const active = useActiveSection(navItems.map((n) => n.id))
+  // 「接下來」接在「走過的路」後面，選單上算同一項
+  const seen = useActiveSection(['works', 'journey', 'next', 'learn', 'contact'])
+  const active = seen === 'next' ? 'journey' : seen
   return (
     <SheetProvider>
       <a className="skip" href="#main">
@@ -41,6 +44,7 @@ export default function App() {
         <Hero />
         <Works />
         <Journey />
+        <Next />
         <Motto />
         <Learn />
         <Contact />

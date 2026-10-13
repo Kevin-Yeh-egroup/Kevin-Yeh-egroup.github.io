@@ -81,10 +81,35 @@ const ICONS: Record<IconKind, ReactNode> = {
       <circle cx={86} cy={74} r={2.6} className="i-yolk" />
     </>
   ),
+  chat: (
+    <>
+      <path d="M14 22 H62 C67 22 70 25 70 30 V54 C70 59 67 62 62 62 H34 L22 74 V62 H14 C9 62 6 59 6 54 V30 C6 25 9 22 14 22 Z" className="i-sea" />
+      <rect x={18} y={34} width={36} height={6} rx={3} className="i-white-flat" />
+      <rect x={18} y={46} width={24} height={6} rx={3} className="i-white-flat" />
+      <path d="M44 48 H86 C90 48 94 51 94 56 V76 C94 81 90 84 86 84 H82 V94 L72 84 H44 C39 84 36 81 36 76 V56 C36 51 39 48 44 48 Z" className="i-yolk" />
+      <path d="M52 66 L60 74 L78 58" fill="none" className="i-ink-line" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  ),
+  map: (
+    <>
+      <path d="M8 26 L34 16 L66 28 L92 18 V74 L66 84 L34 72 L8 82 Z" className="i-paper i-outline" />
+      <path d="M34 16 V72 M66 28 V84" className="i-sea-line" strokeWidth={3} opacity={0.5} />
+      <path d="M50 70 C40 56 34 48 34 39 C34 30 41 23 50 23 C59 23 66 30 66 39 C66 48 60 56 50 70 Z" className="i-yolk" />
+      <circle cx={50} cy={39} r={7} className="i-white-flat" />
+    </>
+  ),
+  mic: (
+    <>
+      <rect x={36} y={10} width={28} height={50} rx={14} className="i-sea" />
+      <path d="M24 44 C24 60 36 70 50 70 C64 70 76 60 76 44" fill="none" className="i-sea-line" strokeWidth={6} strokeLinecap="round" />
+      <path d="M50 70 V84 M36 88 H64" className="i-sea-line" strokeWidth={6} strokeLinecap="round" />
+      <path d="M82 22 C88 28 88 40 82 46 M90 14 C100 26 100 42 90 54" fill="none" className="i-yolk-line" strokeWidth={5} strokeLinecap="round" />
+    </>
+  ),
 }
 
 // 介面用的小圖示
-export function UiIcon({ name, size = 20 }: { name: 'play' | 'close' | 'arrow' | 'external' | 'award' | 'plus' | 'down' | 'replay'; size?: number }) {
+export function UiIcon({ name, size = 20 }: { name: 'play' | 'close' | 'arrow' | 'external' | 'award' | 'plus' | 'down' | 'replay' | 'check'; size?: number }) {
   const common = { width: size, height: size, viewBox: '0 0 24 24', 'aria-hidden': true, focusable: false } as const
   switch (name) {
     case 'play':
@@ -129,6 +154,12 @@ export function UiIcon({ name, size = 20 }: { name: 'play' | 'close' | 'arrow' |
       return (
         <svg {...common}>
           <path d="M6 9 L12 15 L18 9" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'check':
+      return (
+        <svg {...common}>
+          <path d="M5 12.5 L10 17.5 L19 7" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
     case 'replay':
