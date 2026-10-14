@@ -99,7 +99,7 @@ export const profile = {
   photo: PHOTO,
 
   video: {
-    label: '2 分鐘看完我的故事',
+    label: '2 分半看完我的故事',
     wide: 'video/kevin-intro-16x9.mp4',
     tall: 'video/kevin-intro-9x16.mp4',
     poster: 'video/kevin-intro-poster-1280.webp',
