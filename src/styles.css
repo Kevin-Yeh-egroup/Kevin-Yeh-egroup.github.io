@@ -847,6 +847,47 @@ p {
   width: 54%;
 }
 
+/* 寬卡：Kevin 工作檯。橫跨兩欄，電腦版字在左、畫面在右；週報草稿疊在每週工作前面 */
+.tile-wide {
+  grid-column: 1 / -1;
+  min-height: clamp(340px, 30vw, 420px);
+  background: linear-gradient(135deg, var(--card) 0%, var(--sea-soft) 100%);
+}
+
+/* 淺色卡上的標籤改用海色，深色的地圖卡才用薄荷綠 */
+.tile-wide .tile-badge {
+  background: color-mix(in srgb, var(--sea) 12%, transparent);
+  color: var(--sea);
+}
+
+@media (min-width: 960px) {
+  .tile-wide {
+    flex-direction: row;
+  }
+
+  .tile-wide .tile-copy {
+    flex: 0 0 36%;
+    justify-content: center;
+    padding: 32px 28px 32px 32px;
+  }
+
+  .tile-wide .tile-media {
+    flex: 1;
+  }
+
+  .tile-wide .shot-back {
+    left: 0;
+    right: 40px;
+    top: 36px;
+  }
+
+  .tile-wide .shot-front {
+    right: 20px;
+    bottom: 24px;
+    width: 50%;
+  }
+}
+
 /* 整張卡都能點；右上角的＋告訴大家點了會展開 */
 .tile-hit {
   position: absolute;

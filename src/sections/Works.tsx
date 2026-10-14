@@ -11,7 +11,7 @@ import { filled, visible } from '../lib/todo'
 // 作品：第一層只有名字、一句話和真實畫面；點開才看細節、切換畫面、連結
 export function Works() {
   const { works } = profile
-  const [map, familyfin] = works.items
+  const [map, familyfin, workbench] = works.items
   return (
     <section id="works" className="section works" aria-labelledby="works-title">
       <div className="wrap">
@@ -22,6 +22,7 @@ export function Works() {
         <div className="bento">
           <WorkTile work={map} size="lg" badge="7,794 個村里" />
           <WorkTile work={familyfin} size="md" award />
+          {workbench ? <WorkTile work={workbench} size="wide" badge="示範版可以直接試用" /> : null}
         </div>
       </div>
       {works.items.map((w) => (
@@ -40,7 +41,10 @@ function Shot({ view, className, sizes }: { view: WorkView; className: string; s
   )
 }
 
-function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md'; badge?: string; award?: boolean }) {
+// 第三張以後的作品用橫跨兩欄的寬卡：電腦版字在左、畫面在右
+const BACK_SIZES = { lg: '(max-width: 959px) 88vw, 640px', md: '(max-width: 959px) 88vw, 420px', wide: '(max-width: 959px) 88vw, 640px' }
+
+function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md' | 'wide'; badge?: string; award?: boolean }) {
   const openIt = useOpenSheet('work-' + work.id)
   const back = work.views?.[0]
   const front = work.views?.find((v) => v.id === work.tileFront)
@@ -63,7 +67,7 @@ function WorkTile({ work, size, badge, award }: { work: Work; size: 'lg' | 'md';
         ) : null}
       </div>
       <div className="tile-media" data-morph>
-        {back ? <Shot view={back} className="shot-back" sizes={size === 'lg' ? '(max-width: 959px) 88vw, 640px' : '(max-width: 959px) 88vw, 420px'} /> : null}
+        {back ? <Shot view={back} className="shot-back" sizes={BACK_SIZES[size]} /> : null}
         {front ? <Shot view={front} className="shot-front" sizes="(max-width: 959px) 56vw, 380px" /> : null}
       </div>
       <button type="button" className="tile-hit" onClick={openIt} aria-label={`看${work.name}的介紹`}>

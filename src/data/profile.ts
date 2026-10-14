@@ -185,6 +185,27 @@ export const profile = {
         role: todo('我負責的部分'),
         tileFront: 'quiz',
       },
+      {
+        id: 'workbench',
+        name: 'Kevin 工作檯',
+        short: '每週做了什麼、週報、簡報，一個地方完成',
+        line: '把 Codex、Claude Code 的對話紀錄和日報整理成每週的工時格；週報月報自動帶入、請 AI 改成白話，再一鍵做成可以播放的簡報。',
+        since: '2026/10 起',
+        chips: ['每週工時格', '週報月報草稿', '一鍵做成簡報'],
+        views: [
+          { id: 'week', label: '每週工作', image: 'images/works/workbench-week', alt: 'Kevin 工作檯示範版的每週工作頁：專案乘以星期的工時格，格子裡是當天親自下的指令數', width: 1600, height: 900 },
+          { id: 'report', label: '週報草稿', image: 'images/works/workbench-report', alt: 'Kevin 工作檯示範版的週報草稿：左邊是一句話結論和本週數字，右邊編輯工作標題、重要內容與完成標準', width: 1600, height: 900 },
+          { id: 'deck', label: '簡報', image: 'images/works/workbench-deck', alt: '用週報做成的簡報：封面寫著本週結論，下面是各專案的進度條', width: 1600, height: 900 },
+        ],
+        facts: [
+          { label: '示範版', value: '用虛構的資料示範，可以直接點、改、播放簡報' },
+          { label: '真正的版本', value: '只在自己的電腦上執行，工作紀錄不上傳' },
+        ],
+        href: 'https://kevin-workbench.vercel.app/',
+        hrefLabel: '打開示範版',
+        role: todo('我負責的部分'),
+        tileFront: 'report',
+      },
     ] satisfies Work[],
   },
 
