@@ -407,6 +407,18 @@ export const profile = {
       replay: '再看一次',
     },
     tabs: { path: '學習路線', taught: '教過誰', resources: '學習資源' },
+    // 10/15 加入：AI 學習歷程影片「從 0 到 ∞」（Remotion 製作，原始碼不在這個 repo）
+    journeyVideo: {
+      label: '看我的 AI 學習歷程',
+      length: '4 分 46 秒',
+      title: '從 0 到 ∞',
+      wide: 'video/ai-journey-16x9.mp4',
+      tall: 'video/ai-journey-9x16.mp4',
+      poster: 'video/ai-journey-poster-1280.webp',
+      posterSmall: 'video/ai-journey-poster-640.webp',
+      posterTall: 'video/ai-journey-poster-tall.webp',
+      alt: '影片封面：白底上寫著「從 0 到 ∞」，下面一行小字「社工學 AI 的這兩年」',
+    },
     path: ['2024/6 開始學 AI', todo('第一個用 AI 做出來的東西'), '現在用 Codex 做工具、帶夥伴'] satisfies Text[],
     taught: [
       { who: '社工夥伴', topic: '用 AI 協助社工工作', how: todo('形式'), when: todo('時間或次數') },

@@ -37,7 +37,7 @@ npm run dev
 | `src/lib/` | 動態和面板共用的小工具 |
 | `src/styles.css` | 顏色、字體、間距、動態 |
 | `public/images/` | 照片、作品畫面（WebP，三種寬度） |
-| `public/video/` | 2 分半介紹影片（橫式、直式）和封面 |
+| `public/video/` | 2 分半介紹影片、4 分 46 秒 AI 學習歷程影片「從 0 到 ∞」（各有橫式、直式）和封面 |
 | `public/og-image.jpg` | 分享到 LINE、Facebook 時顯示的圖 |
 | `brand/` | 新芽 Y 標誌的正式檔（SVG、PNG、動態版），規則寫在 DESIGN.md |
 | `public/favicon.svg` 等 | 瀏覽器分頁、手機主畫面用的小圖示 |

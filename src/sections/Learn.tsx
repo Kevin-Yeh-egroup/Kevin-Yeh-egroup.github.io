@@ -2,6 +2,8 @@ import { useId, useState, type CSSProperties } from 'react'
 import { UiIcon } from '../components/Icons'
 import { SegPanel, Segmented } from '../components/Segmented'
 import { T } from '../components/Todo'
+import { VideoSheet } from '../components/VideoSheet'
+import { useSheet } from '../lib/sheet'
 import { profile, type Text } from '../data/profile'
 import { useInView, useReducedMotion } from '../lib/motion'
 import { filled, visible } from '../lib/todo'
@@ -44,6 +46,7 @@ export function Learn() {
                 </li>
               ))}
             </ol>
+            <JourneyVideoButton />
           </SegPanel>
           <SegPanel idBase={idBase} id="taught" show={tab === 'taught'} className="cards">
             {learn.taught
@@ -99,6 +102,7 @@ export function Learn() {
           </a>
         </div>
       </div>
+      <VideoSheet id="journey-video" video={learn.journeyVideo} />
     </section>
   )
 }
@@ -181,6 +185,30 @@ function Demo() {
           </button>
         ) : null}
       </div>
+    </div>
+  )
+}
+
+// 學習路線底下：AI 學習歷程影片「從 0 到 ∞」，點了在面板播放
+function JourneyVideoButton() {
+  const { open } = useSheet()
+  const v = profile.learn.journeyVideo
+  return (
+    <div className="journey-video" data-morph-root>
+      <button type="button" className="journey-card" onClick={(e) => open('journey-video', e.currentTarget)} aria-label={`播放影片：${v.title}，${v.length}`}>
+        <span className="journey-thumb" data-morph>
+          <img src={v.posterSmall} alt={v.alt} width={640} height={280} loading="lazy" />
+          <span className="story-play journey-play" aria-hidden="true">
+            <UiIcon name="play" size={14} />
+          </span>
+        </span>
+        <span className="journey-text">
+          <span className="journey-label">{v.label}</span>
+          <span className="journey-meta">
+            {v.title}・{v.length}
+          </span>
+        </span>
+      </button>
     </div>
   )
 }
