@@ -1,0 +1,152 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>寫一張工單（Issue）</title><style>
+:root{--paper:#f5f0e6;--card:#fffdf8;--ink:#1c2b30;--mute:#4f5f64;--go:#0d6b5a;--go-bg:#dff1ea;--stop:#a93a16;--stop-bg:#fbe6da;--sun:#f2c14e;--r:14px;--sh:4px 4px 0 var(--ink);--gap:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:#fff;padding:8px 14px;z-index:9}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;max-width:1180px;margin:0 auto;padding:28px 24px 64px}
+/* 分課導覽 */
+.nav{position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto}
+.brand{font-weight:900;font-size:20px;line-height:1.3;margin:0 0 18px}
+.brand small{display:block;font-size:13px;font-weight:500;color:var(--mute)}
+.nav h2{font-size:12px;letter-spacing:.12em;color:var(--mute);margin:16px 0 6px}
+.nav ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.nav a{display:flex;gap:10px;padding:7px 10px;border-radius:10px;text-decoration:none;font-size:15px}
+.nav a:hover{background:var(--card)}
+.nav a b{font-variant-numeric:tabular-nums;color:var(--go)}
+/* 共用元件 */
+section{margin-bottom:56px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:0 0 10px;font-weight:900}
+h2.t{font-size:26px;margin:0 0 6px;line-height:1.35}
+h3{font-size:17px;margin:0 0 4px;line-height:1.4}
+p{margin:0 0 12px}.lead{font-size:18px;max-width:34em}.mute{color:var(--mute);font-size:14px}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;padding:2px 10px;border:2px solid var(--ink);border-radius:99px;background:var(--sun);margin-bottom:10px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:16px;box-shadow:var(--sh);height:100%}
+.card p{margin:0;font-size:14px;color:var(--mute);line-height:1.55}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:14px;margin-bottom:8px}
+.flow{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:30px;list-style:none;padding:0;margin:0 0 var(--gap)}
+.flow>li{position:relative}
+.flow>li+li::before{content:"→";position:absolute;left:-25px;top:50%;transform:translateY(-50%);font-weight:900;font-size:20px;color:var(--go)}
+.flow a{text-decoration:none;display:block;height:100%}.flow a:hover .card{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.grp{position:relative;margin-top:38px}.grp:first-of-type{margin-top:14px}
+.grp+.grp::before{content:"↓";position:absolute;top:-36px;left:50%;font-weight:900;font-size:20px;color:var(--go)}
+.grp>h3{font-size:13px;letter-spacing:.1em;color:var(--mute);margin-bottom:8px}
+.fail{background:var(--stop-bg)}.ok{background:var(--go-bg)}
+.fail .state{color:var(--stop)}.ok .state{color:var(--go)}
+.state{font-weight:800;font-size:14px;display:block;margin-top:8px}
+code,pre{font-family:ui-monospace,Consolas,"Noto Sans Mono CJK TC",monospace}
+code{background:#ebe4d4;padding:1px 6px;border-radius:5px;font-size:.9em}
+.copy{border:2px solid var(--ink);border-radius:var(--r);background:var(--ink);color:#f5f0e6;overflow:hidden;margin:0 0 var(--gap)}
+.copy header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 8px 8px 16px;font-size:14px;font-weight:700}
+.copy pre{margin:0;padding:4px 16px 16px;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.7;max-height:300px;overflow:auto}
+.copy.paper{background:var(--card);color:var(--ink)}
+button{font:inherit;font-weight:800;font-size:14px;min-height:44px;min-width:92px;padding:0 16px;border-radius:10px;border:2px solid var(--ink);background:var(--sun);color:var(--ink);cursor:pointer}
+button:hover{background:#ffd870}button.done{background:var(--go-bg)}
+.pass{border-left:8px solid var(--go);background:var(--go-bg);border-radius:10px;padding:12px 16px;margin:0 0 var(--gap)}
+.pass b{color:var(--go)}
+.branch{border:2px dashed var(--ink);border-radius:var(--r);padding:16px;margin-top:22px}
+.steps{margin:0 0 var(--gap);padding-left:1.4em}.steps li{margin-bottom:4px}
+details{border:2px solid var(--ink);border-radius:var(--r);background:var(--card);padding:0 16px;margin:0 0 var(--gap)}
+summary{cursor:pointer;font-weight:800;padding:12px 0;min-height:44px}
+details>*:last-child{margin-bottom:16px}
+.words{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+.words b{display:block;font-size:17px}
+footer{font-size:13px;color:var(--mute);border-top:2px solid var(--ink);padding-top:14px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:860px){
+ html{scroll-padding-top:72px}
+ .shell{display:block;padding:0 16px 48px}
+ .nav{top:0;z-index:5;background:var(--paper);margin:0 -16px 20px;padding:10px 16px;border-bottom:2px solid var(--ink);max-height:none}
+ .brand{font-size:16px;margin:0 0 8px}.brand small,.nav h2{display:none}
+ .nav>div{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+ .nav ol{display:flex;gap:6px}.nav a{white-space:nowrap;border:2px solid var(--ink);background:var(--card);min-height:44px;align-items:center}
+ .flow{grid-template-columns:1fr}
+ .flow>li+li::before{content:"↓";left:50%;top:-30px;transform:translateX(-50%)}
+ .words{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flow a:hover .card{transform:none}}
+
+
+.course-shell{max-width:960px;margin:0 auto;padding:0 20px;--brand-ink:var(--go);--brand-tint:var(--go-bg)}
+.course-header{padding:28px 0 16px}
+.course-header p{margin:.55em 0}
+.course-header nav,.lesson-nav{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.course-header nav a,.lesson-nav a,.catalog a{display:inline-flex;align-items:center;min-height:44px}
+.course-shell a{color:var(--brand-ink,var(--ink,#12343b));text-underline-offset:3px}
+.course-shell section,.course-shell .lesson{margin-block:18px;min-width:0}
+.course-shell .lesson,.catalog,.overview{border:1px solid var(--line,#ddd5c6);border-radius:16px;background:var(--card,#fff);padding:clamp(15px,3vw,28px)}
+.course-shell .lesson{height:auto;box-shadow:var(--sh);border:2px solid var(--ink)}
+.course-shell .diagram .flow-node::before{content:none}
+.lesson-heading p:last-child{margin:.5rem 0}
+.eyebrow{font-size:.9rem;font-weight:700;color:var(--brand-ink,#0a4a40)}
+.course-shell .diagram{list-style:none;display:flex;align-items:stretch;gap:24px;flex-wrap:nowrap;margin:20px 0;padding:0}
+.course-shell .diagram .flow-node{position:relative;flex:1;display:grid;place-items:center;min-width:0;padding:12px 8px;text-align:center;border:1px solid var(--line,#ddd5c6);background:var(--brand-tint,#e3f1ec);color:var(--brand-ink,#0a4a40);font-weight:700;border-radius:12px}
+.course-shell .diagram .flow-node:not(:last-child)::after{content:"→";position:absolute;left:calc(100% + 4px);top:50%;transform:translateY(-50%);color:var(--brand-ink,#0a4a40)}
+.steps{padding-inline-start:1.5em;margin-block:16px}
+.steps li+li{margin-top:8px}
+.prompt-box{background:var(--paper,#fbf7ef);border:1px solid var(--line,#ddd5c6);border-radius:12px;padding:12px;margin:12px 0}
+.prompt-head{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:space-between;align-items:center}
+[data-copy]{min-height:44px;cursor:pointer;border:0;border-radius:8px;padding:8px 16px;background:var(--brand-ink,#0a4a40);color:#fff;font:inherit;font-weight:700}
+[role=status]:not(:empty){display:block;margin-top:6px}
+.course-shell details{margin-top:4px}
+.course-shell summary{cursor:pointer;min-height:44px;display:list-item;align-content:center}
+.course-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;font:inherit;line-height:1.65;border-left:3px solid var(--brand-ink,#0a4a40);padding:8px 12px;margin:0;color:var(--ink,#12343b);background:var(--card,#fff)}
+.course-shell .pass{border-radius:10px;background:var(--ok-tint,#e4f3e7);color:var(--ok,#17693a);padding:10px;margin-top:14px}
+.course-shell .coach p{white-space:pre-line}
+.lesson-nav{justify-content:space-between;margin-top:12px}
+.catalog ul{list-style:none;margin:0;padding:0}
+.catalog li:not(:last-child){border-bottom:1px solid var(--line,#ddd5c6)}
+.catalog a{width:100%;justify-content:space-between}
+.course-group{margin-top:16px}
+.course-shell footer{padding:16px 0}
+.skip-link{position:absolute;left:12px;top:-120px;z-index:9;background:#fff;padding:10px}
+.skip-link:focus{top:4px}
+:focus-visible{outline:3px solid #9c3e17;outline-offset:3px}
+@media(max-width:600px){
+ .course-shell{padding:0 14px}
+ .course-shell .diagram{flex-direction:column}
+ .course-shell .diagram .flow-node:not(:last-child)::after{content:"↓";top:100%;left:50%;transform:translateX(-50%)}
+}
+@media print{
+ .course-shell .lesson{break-inside:auto}
+ [data-copy],.skip-link,.course-header nav,.lesson-nav{display:none}
+ .course-shell details:not([open])>pre{display:block}
+}
+</style></head><body id="top"><a class="skip-link" href="#main">跳到課程內容</a><main id="main" class="course-shell"><header class="course-header"><h1>寫一張工單（Issue）</h1><p>第一次用 AI 改程式？照順序做，每次只練一步。</p><nav aria-label="教材連結"><a href="./">課程目錄</a><a href="handbook.html" download>下載離線手冊</a></nav></header><article class="lesson card" id="issue"><header class="lesson-heading"><p class="eyebrow">第一張任務</p><h2>寫一張工單（Issue）</h2><p>Issue 就是開工單：把「搜尋怪怪的」寫成別人照著做也能重現的問題，並寫下怎樣算做好。前置條件：完成離線搜尋練習。離線練習用代號 LOCAL-1；要發到 GitHub 需要練習專案的權限與帶教人授權，沒有授權時只準備草稿。</p></header><ol class="diagram flow" aria-label="操作流程"><li class="flow-node">前｜「搜尋怪怪的」</li><li class="flow-node">寫下現況：怎麼做會出錯</li><li class="flow-node">寫下驗收：怎樣算做好</li><li class="flow-node">後｜搭檔照著草稿能重現問題</li></ol><ol class="steps"><li>正式流程先到練習專案的 Issues 頁，看看有沒有人回報過同一件事。</li><li>貼「擬 Issue 草稿」，請 Codex 寫。</li><li>把草稿念給搭檔聽，看他能不能照著重現。</li><li>取得授權後才建立到 GitHub，記下 Issue 編號。離線練習沿用 LOCAL-1。</li></ol><div class="prompt-box"><div class="prompt-head"><strong>擬 Issue 草稿（貼給 Codex）</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">請擬一張 Issue。標題「搜尋忽略關鍵字前後空白」。現況：搜尋「  入門  」找不到「程式入門」。驗收：有無前後空白得到同一個結果，其他搜尋行為維持既有規則。列出重現步驟、影響與測試方式。只提供文字草稿，未經我同意不要發到 GitHub。</pre></details></div><p class="pass"><strong>過關畫面</strong> 搭檔只看草稿就能重現問題，並說得出怎樣算做好。正式流程記下實際 Issue 編號與網址；離線練習用 LOCAL-1。</p><details class="coach"><summary>帶教備註</summary><p>好的 Issue 有三樣：可重現的步驟、可觀察的驗收條件、不在範圍內的事。建立 Issue 屬於外部操作，沒有授權時只備草稿。可以用 Issue 編號替 Codex 聊天命名，之後容易找回。</p></details><nav class="lesson-nav" aria-label="前後課程"><a href="offline-search-practice.html">← 離線搜尋練習</a><a href="branch.html">開一個修改分支（Branch） →</a></nav></article><footer><a href="https://github.com/Kevin-Yeh-egroup/ai-development-handbook">教材 GitHub repo</a><details><summary>工具的官方說明</summary><ul><li><a href="https://learn.chatgpt.com/docs/app">Codex 桌面 App</a></li><li><a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">AGENTS.md</a></li><li><a href="https://code.claude.com/docs/en/quickstart">Claude Code 入門</a></li><li><a href="https://docs.github.com/en/pull-requests/get-started/pull-request-quickstart">GitHub 審查流程</a></li></ul></details></footer></main><script>(async function () {
+  document.addEventListener('click', async event => {
+    const button = event.target.closest('button[data-copy]');
+    if (!button) return;
+    const box = button.closest('.prompt-box');
+    const text = box.querySelector('pre').textContent;
+    const details = box.querySelector('details');
+    const feedback = box.querySelector('[role=status]');
+    try {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const input = document.createElement('textarea');
+        input.value = text;
+        input.style.cssText = 'position:fixed;left:0;top:0;opacity:0;pointer-events:none';
+        document.body.append(input);
+        try {
+          input.select();
+          if (!document.execCommand('copy')) throw new Error('copy unavailable');
+        } finally {
+          input.remove();
+          button.focus();
+        }
+      }
+      feedback.textContent = '已複製，可以貼到 Codex。';
+    } catch {
+      details.open = true;
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(box.querySelector('pre'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+      feedback.textContent = '已選取指令，請使用瀏覽器的複製功能。';
+    }
+  });
+})();</script></body></html>

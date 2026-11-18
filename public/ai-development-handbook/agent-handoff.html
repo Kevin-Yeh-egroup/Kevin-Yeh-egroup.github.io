@@ -1,0 +1,158 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent 分工</title><style>
+:root{--paper:#f5f0e6;--card:#fffdf8;--ink:#1c2b30;--mute:#4f5f64;--go:#0d6b5a;--go-bg:#dff1ea;--stop:#a93a16;--stop-bg:#fbe6da;--sun:#f2c14e;--r:14px;--sh:4px 4px 0 var(--ink);--gap:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--ink);color:#fff;padding:8px 14px;z-index:9}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;max-width:1180px;margin:0 auto;padding:28px 24px 64px}
+/* 分課導覽 */
+.nav{position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto}
+.brand{font-weight:900;font-size:20px;line-height:1.3;margin:0 0 18px}
+.brand small{display:block;font-size:13px;font-weight:500;color:var(--mute)}
+.nav h2{font-size:12px;letter-spacing:.12em;color:var(--mute);margin:16px 0 6px}
+.nav ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.nav a{display:flex;gap:10px;padding:7px 10px;border-radius:10px;text-decoration:none;font-size:15px}
+.nav a:hover{background:var(--card)}
+.nav a b{font-variant-numeric:tabular-nums;color:var(--go)}
+/* 共用元件 */
+section{margin-bottom:56px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:0 0 10px;font-weight:900}
+h2.t{font-size:26px;margin:0 0 6px;line-height:1.35}
+h3{font-size:17px;margin:0 0 4px;line-height:1.4}
+p{margin:0 0 12px}.lead{font-size:18px;max-width:34em}.mute{color:var(--mute);font-size:14px}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;padding:2px 10px;border:2px solid var(--ink);border-radius:99px;background:var(--sun);margin-bottom:10px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:16px;box-shadow:var(--sh);height:100%}
+.card p{margin:0;font-size:14px;color:var(--mute);line-height:1.55}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:14px;margin-bottom:8px}
+.flow{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:30px;list-style:none;padding:0;margin:0 0 var(--gap)}
+.flow>li{position:relative}
+.flow>li+li::before{content:"→";position:absolute;left:-25px;top:50%;transform:translateY(-50%);font-weight:900;font-size:20px;color:var(--go)}
+.flow a{text-decoration:none;display:block;height:100%}.flow a:hover .card{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.grp{position:relative;margin-top:38px}.grp:first-of-type{margin-top:14px}
+.grp+.grp::before{content:"↓";position:absolute;top:-36px;left:50%;font-weight:900;font-size:20px;color:var(--go)}
+.grp>h3{font-size:13px;letter-spacing:.1em;color:var(--mute);margin-bottom:8px}
+.fail{background:var(--stop-bg)}.ok{background:var(--go-bg)}
+.fail .state{color:var(--stop)}.ok .state{color:var(--go)}
+.state{font-weight:800;font-size:14px;display:block;margin-top:8px}
+code,pre{font-family:ui-monospace,Consolas,"Noto Sans Mono CJK TC",monospace}
+code{background:#ebe4d4;padding:1px 6px;border-radius:5px;font-size:.9em}
+.copy{border:2px solid var(--ink);border-radius:var(--r);background:var(--ink);color:#f5f0e6;overflow:hidden;margin:0 0 var(--gap)}
+.copy header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 8px 8px 16px;font-size:14px;font-weight:700}
+.copy pre{margin:0;padding:4px 16px 16px;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.7;max-height:300px;overflow:auto}
+.copy.paper{background:var(--card);color:var(--ink)}
+button{font:inherit;font-weight:800;font-size:14px;min-height:44px;min-width:92px;padding:0 16px;border-radius:10px;border:2px solid var(--ink);background:var(--sun);color:var(--ink);cursor:pointer}
+button:hover{background:#ffd870}button.done{background:var(--go-bg)}
+.pass{border-left:8px solid var(--go);background:var(--go-bg);border-radius:10px;padding:12px 16px;margin:0 0 var(--gap)}
+.pass b{color:var(--go)}
+.branch{border:2px dashed var(--ink);border-radius:var(--r);padding:16px;margin-top:22px}
+.steps{margin:0 0 var(--gap);padding-left:1.4em}.steps li{margin-bottom:4px}
+details{border:2px solid var(--ink);border-radius:var(--r);background:var(--card);padding:0 16px;margin:0 0 var(--gap)}
+summary{cursor:pointer;font-weight:800;padding:12px 0;min-height:44px}
+details>*:last-child{margin-bottom:16px}
+.words{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+.words b{display:block;font-size:17px}
+footer{font-size:13px;color:var(--mute);border-top:2px solid var(--ink);padding-top:14px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:860px){
+ html{scroll-padding-top:72px}
+ .shell{display:block;padding:0 16px 48px}
+ .nav{top:0;z-index:5;background:var(--paper);margin:0 -16px 20px;padding:10px 16px;border-bottom:2px solid var(--ink);max-height:none}
+ .brand{font-size:16px;margin:0 0 8px}.brand small,.nav h2{display:none}
+ .nav>div{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+ .nav ol{display:flex;gap:6px}.nav a{white-space:nowrap;border:2px solid var(--ink);background:var(--card);min-height:44px;align-items:center}
+ .flow{grid-template-columns:1fr}
+ .flow>li+li::before{content:"↓";left:50%;top:-30px;transform:translateX(-50%)}
+ .words{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flow a:hover .card{transform:none}}
+
+
+.course-shell{max-width:960px;margin:0 auto;padding:0 20px;--brand-ink:var(--go);--brand-tint:var(--go-bg)}
+.course-header{padding:28px 0 16px}
+.course-header p{margin:.55em 0}
+.course-header nav,.lesson-nav{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.course-header nav a,.lesson-nav a,.catalog a{display:inline-flex;align-items:center;min-height:44px}
+.course-shell a{color:var(--brand-ink,var(--ink,#12343b));text-underline-offset:3px}
+.course-shell section,.course-shell .lesson{margin-block:18px;min-width:0}
+.course-shell .lesson,.catalog,.overview{border:1px solid var(--line,#ddd5c6);border-radius:16px;background:var(--card,#fff);padding:clamp(15px,3vw,28px)}
+.course-shell .lesson{height:auto;box-shadow:var(--sh);border:2px solid var(--ink)}
+.course-shell .diagram .flow-node::before{content:none}
+.lesson-heading p:last-child{margin:.5rem 0}
+.eyebrow{font-size:.9rem;font-weight:700;color:var(--brand-ink,#0a4a40)}
+.course-shell .diagram{list-style:none;display:flex;align-items:stretch;gap:24px;flex-wrap:nowrap;margin:20px 0;padding:0}
+.course-shell .diagram .flow-node{position:relative;flex:1;display:grid;place-items:center;min-width:0;padding:12px 8px;text-align:center;border:1px solid var(--line,#ddd5c6);background:var(--brand-tint,#e3f1ec);color:var(--brand-ink,#0a4a40);font-weight:700;border-radius:12px}
+.course-shell .diagram .flow-node:not(:last-child)::after{content:"→";position:absolute;left:calc(100% + 4px);top:50%;transform:translateY(-50%);color:var(--brand-ink,#0a4a40)}
+.steps{padding-inline-start:1.5em;margin-block:16px}
+.steps li+li{margin-top:8px}
+.prompt-box{background:var(--paper,#fbf7ef);border:1px solid var(--line,#ddd5c6);border-radius:12px;padding:12px;margin:12px 0}
+.prompt-head{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:space-between;align-items:center}
+[data-copy]{min-height:44px;cursor:pointer;border:0;border-radius:8px;padding:8px 16px;background:var(--brand-ink,#0a4a40);color:#fff;font:inherit;font-weight:700}
+[role=status]:not(:empty){display:block;margin-top:6px}
+.course-shell details{margin-top:4px}
+.course-shell summary{cursor:pointer;min-height:44px;display:list-item;align-content:center}
+.course-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;font:inherit;line-height:1.65;border-left:3px solid var(--brand-ink,#0a4a40);padding:8px 12px;margin:0;color:var(--ink,#12343b);background:var(--card,#fff)}
+.course-shell .pass{border-radius:10px;background:var(--ok-tint,#e4f3e7);color:var(--ok,#17693a);padding:10px;margin-top:14px}
+.course-shell .coach p{white-space:pre-line}
+.lesson-nav{justify-content:space-between;margin-top:12px}
+.catalog ul{list-style:none;margin:0;padding:0}
+.catalog li:not(:last-child){border-bottom:1px solid var(--line,#ddd5c6)}
+.catalog a{width:100%;justify-content:space-between}
+.course-group{margin-top:16px}
+.course-shell footer{padding:16px 0}
+.skip-link{position:absolute;left:12px;top:-120px;z-index:9;background:#fff;padding:10px}
+.skip-link:focus{top:4px}
+:focus-visible{outline:3px solid #9c3e17;outline-offset:3px}
+@media(max-width:600px){
+ .course-shell{padding:0 14px}
+ .course-shell .diagram{flex-direction:column}
+ .course-shell .diagram .flow-node:not(:last-child)::after{content:"↓";top:100%;left:50%;transform:translateX(-50%)}
+}
+@media print{
+ .course-shell .lesson{break-inside:auto}
+ [data-copy],.skip-link,.course-header nav,.lesson-nav{display:none}
+ .course-shell details:not([open])>pre{display:block}
+}
+</style></head><body id="top"><a class="skip-link" href="#main">跳到課程內容</a><main id="main" class="course-shell"><header class="course-header"><h1>Agent 分工</h1><p>第一次用 AI 改程式？照順序做，每次只練一步。</p><nav aria-label="教材連結"><a href="./">課程目錄</a><a href="handbook.html" download>下載離線手冊</a></nav></header><article class="lesson card" id="agent-handoff"><header class="lesson-heading"><p class="eyebrow">進階</p><h2>Agent 分工</h2><p>兩個 AI 幫手一起工作時，同一時間只讓一個動手改檔案，另一個只看不改。這裡 Codex 是唯一寫入者，本機 Claude Code 做唯讀複核，由你手動把內容貼過去交棒。前置條件：已有一次存檔好的修改（「驗證並存檔」一課），本機 Claude Code 已依團隊允許的帳號與資料範圍安裝，並開在同一個專案資料夾。</p></header><ol class="diagram flow" aria-label="操作流程"><li class="flow-node">你：指定 Codex 為唯一寫入者</li><li class="flow-node">Codex：寫交棒單（輸入、產物、停止條件）</li><li class="flow-node">你：手動貼給本機 Claude Code</li><li class="flow-node">Claude：唯讀複核，列出發現後停止</li><li class="flow-node">你：把發現貼回 Codex</li><li class="flow-node">後｜Codex 查證、修改、重跑測試</li></ol><ol class="steps"><li>貼「準備交棒單」給 Codex，它寫完後會暫停修改。</li><li>在同一個專案開啟本機 Claude Code，貼「唯讀複核」，並把交棒單附在後面。</li><li>先看 Claude 回覆的資料夾與分支對不對，再看發現清單。</li><li>把發現清單附在「交回 Codex 查證」後面，貼回 Codex。</li><li>要改正式畫面時，改用「請 Claude 先畫稿」，稿件經負責人確認後才讓 Codex 實作。</li></ol><div class="prompt-box"><div class="prompt-head"><strong>準備交棒單（貼給 Codex）</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">請準備一份交棒單，讓我手動貼給本機 Claude Code 做唯讀複核。內容包含：專案與 Issue、分支與最新 commit、這次改了什麼、驗收條件、已跑的檢查與結果、希望對方特別留意的地方。並註明：此階段唯一寫入者是 Codex，Claude 只讀不改；輸入是本次 Issue 的差異與測試；產物是一份發現清單；停止條件是看完本次差異與測試就停。不要放入密鑰或個資。輸出交棒單後請暫停修改，等我把複核結果貼回來。</pre></details></div><div class="prompt-box"><div class="prompt-head"><strong>唯讀複核（貼給本機 Claude Code，後面附上交棒單）</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">請先回覆實際工作目錄、分支與已讀專案規則。這次只做唯讀複核：不要修改、建立或刪除任何檔案，也不要執行會改變工作區的指令。審查這次 Issue 的差異及測試，留意尚未涵蓋的輸入和可能改變的行為。每個發現附檔案位置、觀察依據及最小檢查方式，讓 Codex 複核。看完本次差異與測試就停下，輸出發現清單；沒有發現也請明說。
+
+交棒單：
+【貼上 Codex 準備的交棒單】</pre></details></div><div class="prompt-box"><div class="prompt-head"><strong>交回 Codex 查證（貼給 Codex，後面附上發現清單）</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">以下是本機 Claude 的唯讀複核結果。請逐項查證：成立的，說明依據並做最小修改、補上對應測試、重跑相關檢查；不成立的，說明原因。只處理本次 Issue 範圍內的項目，範圍外的列為後續建議。
+
+複核結果：
+【貼上 Claude 的發現清單】</pre></details></div><div class="prompt-box"><div class="prompt-head"><strong>正式畫面變更：請 Claude 先畫稿（貼給本機 Claude Code）</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">請先回覆目前目錄、分支、Issue、已讀的共用產品體驗標準與產出位置。沿用專案既有的品牌規範、設計 tokens 與正式元件，做一份實際可渲染的設計稿，呈現桌機與手機，以及輸入、結果、空結果、錯誤等適用狀態，使用假資料。這階段只寫入設計稿與指定產物，不修改正式程式。完成後告訴我怎麼打開稿件，並列出需要負責人確認的事項。找不到共用標準時請停下來告訴我，不要自行假設。</pre></details></div><div class="prompt-box"><div class="prompt-head"><strong>進階｜在 Codex 專案內試一次 Agent 分工</strong><button type="button" data-copy>複製指令</button></div><span role="status"></span><details><summary>看完整指令</summary><pre tabindex="0">如果這個 Codex 環境支援子 Agent，我授權開一個唯讀子 Agent，獨立確認這次修改與既有測試有沒有漏掉重要情境。請給它專案路徑、工單、分支、要看的差異與驗收條件。它只回報檔案、依據和測試建議，完成一次複核就停。你是唯一能寫入程式的 Agent，收到結果後請查證並回報。若沒有子 Agent 功能，請輸出同樣的交棒單，我會把它貼給本機 Claude Code。</pre></details></div><p class="pass"><strong>過關畫面</strong> 任何時刻只有一個寫入者。Claude 的每個發現都對得到實際檔案位置；Codex 查證後重跑測試通過。交棒單寫明了輸入、產物與停止條件。</p><details class="coach"><summary>帶教備註</summary><p>手動交棒（複製貼上）就足夠，不需要自動串接；沒有需求來源的自動化不要先做。分工原則：Codex 負責實作、實測與存檔，Claude 的複核與設計提案分開記錄，分歧與不採用的原因也留下。正式 UI 的順序固定為：Claude 產出實際可渲染稿、負責人打開確認、Codex 才實作、最後逐項對稿。設計稿的進階內容依共用產品體驗標準補齊：利害關係人關係圖（區分已確認與待確認角色）、自動化泳道圖（全自動、半自動、人工）、畫面故事板、情境腳本與測試覆蓋矩陣（測試層、斷言、假資料、證據與人工驗收責任），並說明希克、峰終、雅各布、預設效應、損失規避五項原則的適用判斷與覆蓋範圍。設計階段只能說「測試已規劃」，有執行證據才說「通過」。Claude 可使用的資料範圍與共用標準的位置，以團隊設定卡為準；尚未收到 Claude 回覆確認前，交接標為待完成。</p></details><nav class="lesson-nav" aria-label="前後課程"><a href="minimal-project.html">← 建立最小專案</a><a href="./">回課程目錄</a></nav></article><footer><a href="https://github.com/Kevin-Yeh-egroup/ai-development-handbook">教材 GitHub repo</a><details><summary>工具的官方說明</summary><ul><li><a href="https://learn.chatgpt.com/docs/app">Codex 桌面 App</a></li><li><a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">AGENTS.md</a></li><li><a href="https://code.claude.com/docs/en/quickstart">Claude Code 入門</a></li><li><a href="https://docs.github.com/en/pull-requests/get-started/pull-request-quickstart">GitHub 審查流程</a></li></ul></details></footer></main><script>(async function () {
+  document.addEventListener('click', async event => {
+    const button = event.target.closest('button[data-copy]');
+    if (!button) return;
+    const box = button.closest('.prompt-box');
+    const text = box.querySelector('pre').textContent;
+    const details = box.querySelector('details');
+    const feedback = box.querySelector('[role=status]');
+    try {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const input = document.createElement('textarea');
+        input.value = text;
+        input.style.cssText = 'position:fixed;left:0;top:0;opacity:0;pointer-events:none';
+        document.body.append(input);
+        try {
+          input.select();
+          if (!document.execCommand('copy')) throw new Error('copy unavailable');
+        } finally {
+          input.remove();
+          button.focus();
+        }
+      }
+      feedback.textContent = '已複製，可以貼到 Codex。';
+    } catch {
+      details.open = true;
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(box.querySelector('pre'));
+      selection.removeAllRanges();
+      selection.addRange(range);
+      feedback.textContent = '已選取指令，請使用瀏覽器的複製功能。';
+    }
+  });
+})();</script></body></html>
