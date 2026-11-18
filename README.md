@@ -32,6 +32,7 @@ npm run dev
 | --- | --- |
 | `src/data/profile.ts` | 網站上所有文字、數字（含出處）、連結、圖片設定 |
 | `src/sections/` | 每一個區塊的版面：首屏、作品、走過的路、接下來、座右銘、一起學、換你了 |
+| `src/workbench/` | `/workbench/` 的互動示範與獨立的虛構工作樣本 |
 | `src/components/Sheet.tsx` | 點開才看的面板（電腦置中、手機從下面滑上來） |
 | `src/components/Segmented.tsx` | 分段切換（一次只看一種內容） |
 | `src/lib/` | 動態和面板共用的小工具 |
@@ -53,5 +54,7 @@ npm run dev
 | `npm run build` | 建置正式網站到 `dist/` |
 | `npm run build:preview` | 建置含「待補」標籤的預覽版 |
 | `npm run preview` | 在本機看建置好的網站 |
+| `npm run storybook` | 在本機檢視作品入口與工作檯的正式元件 |
+| `npm run build:storybook` | 建置本機元件預覽到 `storybook-static/` |
 | `npm run lint` | 檢查程式碼 |
 | `npm run todo` | 列出還沒補的內容 |

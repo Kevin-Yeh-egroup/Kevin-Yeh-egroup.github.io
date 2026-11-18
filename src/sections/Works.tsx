@@ -22,7 +22,7 @@ export function Works() {
         <div className="bento">
           <WorkTile work={map} size="lg" badge="7,794 個村里" />
           <WorkTile work={familyfin} size="md" award />
-          {workbench ? <WorkTile work={workbench} size="wide" badge="示範版可以直接試用" /> : null}
+          {workbench ? <WorkTile work={workbench} size="wide" badge="模擬資料" /> : null}
         </div>
       </div>
       {works.items.map((w) => (
@@ -83,6 +83,8 @@ function WorkSheet({ work }: { work: Work }) {
   const views = work.views ?? []
   const [view, setView] = useState(views[0]?.id ?? '')
   const idBase = useId()
+  const href = filled(work.href) ? work.href : undefined
+  const external = href?.startsWith('https://') || href?.startsWith('http://')
   return (
     <Sheet id={'work-' + work.id} label={work.name}>
       <div className="sheet-media" data-morph-target>
@@ -145,10 +147,10 @@ function WorkSheet({ work }: { work: Work }) {
             <T value={work.role} />
           </p>
         ) : null}
-        {filled(work.href) ? (
-          <a className="button-primary" href={work.href} target="_blank" rel="noopener">
+        {href ? (
+          <a className="button-primary" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
             {work.hrefLabel ?? '打開網站'}
-            <UiIcon name="external" size={18} />
+            {external ? <UiIcon name="external" size={18} /> : <span aria-hidden="true">→</span>}
           </a>
         ) : null}
       </div>

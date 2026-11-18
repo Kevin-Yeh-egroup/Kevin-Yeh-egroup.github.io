@@ -10,7 +10,9 @@
     "build:preview": "npm run font && tsc -b && vite build --mode preview-todo",
     "lint": "oxlint",
     "preview": "vite preview",
-    "todo": "node scripts/list-todos.mjs"
+    "todo": "node scripts/list-todos.mjs",
+    "storybook": "npm run font && storybook dev -p 6006",
+    "build:storybook": "npm run font && storybook build"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -18,12 +20,14 @@
   },
   "devDependencies": {
     "@fontsource/huninn": "^5.3.1",
+    "@storybook/react-vite": "10.6.7",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "fontkit": "^2.0.4",
     "oxlint": "^1.81.0",
+    "storybook": "10.6.7",
     "subset-font": "^2.9.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
