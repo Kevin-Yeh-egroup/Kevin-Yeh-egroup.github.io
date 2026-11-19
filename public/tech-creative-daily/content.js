@@ -1,4 +1,4 @@
-import { weekly2026w47 } from './issues/weekly-2026-w47.js';
+import { weekly2026w47, WEEKLY_VIDEO_COMMAND } from './issues/weekly-2026-w47.js';
 
 // 已確認公開的期刊、可用素材與做法。草稿保存在網站專案之外。
 const SRC={
@@ -48,6 +48,8 @@ export const TASKS=[['intro','介紹功能'],['anim','做動畫'],['video','拍�
 export const TYPES=['素材','做法','參考'];
 /* check = 來源查核；adopt = 採用審查，兩者刻意分開 */
 export const KIT=[
+  {id:'m-02',type:'素材',title:'請 AI 先排三格分鏡',sum:'用五秒的工作坊開場當例子。複製給 AI，再換成你想說明的情境。',tasks:['anim'],issue:weekly2026w47.id,at:'sec-ai',kw:'AI 指令 分鏡 影片 短片 角色走位 storyboard',
+   prompt:WEEKLY_VIDEO_COMMAND,check:'出自 11/19 週刊 v4',adopt:'可複製後改成自己的場景'},
   {id:'m-01',type:'素材',title:'三格分鏡模板',sum:'可以直接改字幕，下載後用紙筆或投影片畫。',tasks:['intro','anim','video'],issue:'creative',at:'sec-practice',kw:'分鏡 storyboard 模板 下載 三格',
    check:'本站原創，不含第三方素材',adopt:'可自由使用、修改與分享，不需標註來源'},
   {id:'h-01',type:'做法',title:'用三格分鏡把一個功能講清楚',sum:'每格只講一件事，15 分鐘內可以試完。',tasks:['intro','anim','video'],issue:'creative',at:'sec-practice',kw:'分鏡 步驟 字幕 動圖',

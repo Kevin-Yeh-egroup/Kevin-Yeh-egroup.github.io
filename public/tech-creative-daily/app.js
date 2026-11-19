@@ -150,6 +150,10 @@ function kitCard(k,from){
   const src=H('/issue/'+k.issue,{at:k.at,from});
   const st=`<dl class="st"><div><dt>來源查核</dt><dd>${k.check}</dd></div><div><dt>採用審查</dt><dd>${k.adopt}</dd></div></dl>`;
   const head=`<div class="tags"><span class="tag ${k.type==='參考'?'tag-line':''}">${k.type}</span>${k.tasks.map(t=>`<span class="small muted">${taskName(t)}</span>`).join('<span class="small muted" aria-hidden="true">·</span>')}</div>`;
+  if(k.prompt){
+    const copyId=`kit-prompt-${k.id}`;
+    return `<article class="kit lead-card" id="kit-${k.id}" data-testid="kit-${k.id}">${head}<h3>${esc(k.title)}</h3><p>${esc(k.sum)}</p><span id="${copyId}" hidden>${esc(k.prompt)}</span><div class="btns"><button type="button" class="btn btn-p" data-copy="${copyId}" data-testid="copy-${k.id}" data-copy-fallback="無法自動複製。請回原文選取指令">${ic('copy')}複製分鏡指令</button><a class="lnk" id="src-${k.id}" data-testid="src-${k.id}" href="${src}">回原文看怎麼用</a></div>${st}</article>`;
+  }
   if(k.type==='素材')return `<article class="kit lead-card" id="kit-${k.id}" data-testid="kit-${k.id}">${head}<h3><a href="${H('/toolkit/'+k.id,{from})}">${k.title}</a></h3><p>${k.sum}</p><div class="btns"><a class="btn btn-p" id="open-${k.id}" data-testid="open-${k.id}" href="${H('/toolkit/'+k.id,{from})}">看模板並下載</a><a class="lnk" href="${src}">回到來源段落</a></div>${st}</article>`;
   if(k.type==='做法'){const h=k.how;return `<article class="kit" id="kit-${k.id}" data-testid="kit-${k.id}">${head}<h3>${k.title}</h3><p>${k.sum}</p><details class="how" data-how="${k.id}" ${ui.open.has(k.id)?'open':''}><summary data-testid="how-${k.id}">${ic('chev')}展開做法</summary><div class="how-b"><div><h4>適用情境</h4><p>${h.fit}</p></div><div><h4>步驟</h4><ol class="steps">${h.steps.map(s=>`<li><span>${s}</span></li>`).join('')}</ol></div><div><h4>怎樣算成功</h4><p>${h.done}</p></div><div><h4>已知限制</h4><p>${h.limit}</p></div><a class="lnk" data-testid="src-${k.id}" id="src-${k.id}" href="${src}">回到來源段落</a></div></details>${st}</article>`}
   return `<article class="kit" id="kit-${k.id}" data-testid="kit-${k.id}">${head}<h3>${k.title}</h3><p>${k.sum}</p><div class="btns"><a class="lnk" href="${k.src.url}" target="_blank" rel="noopener noreferrer">看原始出處${ic('ext')}<span class="sr">（開新分頁）</span></a><a class="lnk" id="src-${k.id}" href="${src}">回到提到它的段落</a></div>${st}</article>`;
@@ -169,7 +173,7 @@ function vToolkit(r){
   <div class="bar-r" id="kit-bar">${kitCount(q)}</div><div class="kits" id="kit-res">${kitResults(q)}</div></div>`;
 }
 function vTemplate(r){
-  const k=KIT[0],from=returnRoute(r.q.get('from'))||'#/toolkit';
+  const k=KIT.find(item=>item.id==='m-01'),from=returnRoute(r.q.get('from'))||'#/toolkit';
   const label=describe(from);
   return `<div class="wrap" style="padding-bottom:64px"><div class="phead"><a class="back" data-return data-testid="tpl-back" href="${esc(from)}">${ic('l')}${esc(label)}</a><p class="kicker" style="margin-top:8px"><span class="tag">素材</span><span>原創模板</span></p><h1 tabindex="-1" style="margin-top:10px">${k.title}</h1><p>先用例句看懂怎麼填，再換成你的內容。下載的檔案可以列印，或放進投影片。</p></div>
   <div class="tpl">${ui.tpl.map((f,i)=>`<section aria-label="第 ${i+1} 格，${FRAMES[i].t}"><span class="ftime">${FRAMES[i].t}</span><span class="tbar" style="--l:${FRAMES[i].l};--w:${FRAMES[i].w}"><i></i></span><div class="sketch" id="sk-${i}">${esc(f.scene)||'在這裡畫畫面'}</div><label class="field"><span>畫面要出現什麼</span><input class="inp" data-tpl="${i}:scene" value="${esc(f.scene)}" maxlength="30"></label><label class="field"><span>字幕</span><input class="inp" data-tpl="${i}:cap" value="${esc(f.cap)}" maxlength="30"></label></section>`).join('')}</div>
@@ -310,7 +314,7 @@ function tplSVG(f){
   return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" font-family="'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif"><title>三格分鏡模板</title><desc>本站原創模板，可自由使用、修改與分享，不需標註來源。</desc><rect width="1600" height="1000" fill="#fcfdfc"/><text x="65" y="92" font-size="46" font-weight="700" fill="#12343b">三格分鏡模板</text><text x="65" y="136" font-size="24" fill="#55696c">我遇到什麼 → 我做了什麼 → 畫面有什麼改變</text>${cols}<rect x="65" y="890" width="1480" height="70" rx="14" fill="#fff3d6"/><text x="90" y="935" font-size="25" fill="#12343b">拿給不熟悉的人看，先不解說：下一步會點哪裡？點完會看到什麼？</text></svg>`;
 }
 function downloadTpl(){const url=URL.createObjectURL(new Blob([tplSVG(ui.tpl)],{type:'image/svg+xml;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='three-frame-storyboard-template.svg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);say('模板已下載',true)}
-async function copyText(text){
+async function copyText(text,fallbackMessage='無法自動複製，請手動選取文字'){
   if(navigator.clipboard){
     try{
       await navigator.clipboard.writeText(text);
@@ -326,7 +330,7 @@ async function copyText(text){
   field.select();
   let copied=false;
   try{copied=document.execCommand('copy')}catch{copied=false}finally{field.remove()}
-  say(copied?'已複製':'無法自動複製，請手動選取文字',true);
+  say(copied?'已複製':fallbackMessage,true);
 }
 
 /* ───────── 事件 ───────── */
@@ -346,7 +350,7 @@ document.addEventListener('click',e=>{
     focusEl(inp);say('已清除條件，顯示全部',true);return}
   if((x=c('[data-demo-play]'))){const f=$('[data-float]',x.parentNode);f.classList.remove('is-on');void f.offsetWidth;f.classList.add('is-on');setTimeout(()=>f.classList.remove('is-on'),2800);return}
   if((x=c('[data-demo-toggle]'))){const open=x.getAttribute('aria-expanded')!=='true',p=x.nextElementSibling;x.setAttribute('aria-expanded',open);x.textContent=open?'按一下收合':'按一下展開';p.hidden=!open;return}
-  if((x=c('[data-copy]'))){copyText(document.getElementById(x.dataset.copy).textContent);return}
+  if((x=c('[data-copy]'))){copyText(document.getElementById(x.dataset.copy).textContent,x.dataset.copyFallback);return}
   if(c('[data-dl]')){downloadTpl();return}
   if((x=c('[data-tpl-reset]'))){const blank=x.dataset.tplReset==='blank';ui.tpl=FRAMES.map(f=>({scene:blank?'':f.scene,cap:blank?'':f.cap}));ui.tpl.forEach((f,i)=>{$(`[data-tpl="${i}:scene"]`).value=f.scene;$(`[data-tpl="${i}:cap"]`).value=f.cap;$('#sk-'+i).textContent=f.scene||'在這裡畫畫面'});say(blank?'已清空，可以按「還原例句」復原':'已還原例句',true);return}
   if((x=c('a[href^="#/"]'))&&!(e.metaKey||e.ctrlKey||e.shiftKey)){e.preventDefault();const h=x.getAttribute('href');if(h===(location.hash||'#/')){intent='push';place(route());intent=null;return}save(x.id);intent=x.hasAttribute('data-return')?'return':'push';go(h)}
