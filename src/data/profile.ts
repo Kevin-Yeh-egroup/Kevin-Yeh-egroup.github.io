@@ -421,6 +421,7 @@ export const profile = {
       { who: todo('對象'), topic: 'vibe coding 入門', how: todo('形式'), when: todo('時間或次數') },
     ] satisfies Teaching[],
     resources: [
+      { name: '科技與創作日報', desc: '用白話讀科技、設計與創作新知，找得到素材、做法與設計用語。', status: '已上線', href: '/tech-creative-daily/' },
       { name: 'AI 協作開發教學手冊', desc: '從設定 Codex、修改程式，到建立專案和分工。每課都有操作圖和可複製的指令。', status: '已上線', href: '/ai-development-handbook/' },
       { name: 'Codex 行政工作實驗課', desc: '90 分鐘入門實作課：用安全的範例練習整理資料、檢查缺漏、產出草稿', status: '已上線', href: 'https://course-ops-automation-requirements.vercel.app/' },
       { name: 'VLC 轉 MP3 教學', desc: '給沒有 IT 背景的人：7 個步驟把錄影轉成 MP3', status: '已上線', href: 'https://vlc-recording-to-mp3-guide.vercel.app/' },
