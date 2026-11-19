@@ -9,11 +9,15 @@ import { Journey } from './sections/Journey'
 import { Learn } from './sections/Learn'
 import { Motto } from './sections/Motto'
 import { Next } from './sections/Next'
+import { Weekly, type DailyIssue } from './sections/Weekly'
 import { Works } from './sections/Works'
+
+declare const __LATEST_DAILY_ISSUE__: DailyIssue | null
 
 const year = new Date().getFullYear()
 
 const navItems = [
+  { id: 'weekly', label: '日報', dot: true },
   { id: 'works', label: profile.works.nav },
   { id: 'journey', label: profile.journey.nav },
   { id: 'learn', label: profile.learn.nav },
@@ -22,7 +26,7 @@ const navItems = [
 
 export default function App() {
   // 「接下來」接在「走過的路」後面，選單上算同一項
-  const seen = useActiveSection(['works', 'journey', 'next', 'learn', 'contact'])
+  const seen = useActiveSection(['weekly', 'works', 'journey', 'next', 'learn', 'contact'])
   const active = seen === 'next' ? 'journey' : seen
   return (
     <SheetProvider>
@@ -42,6 +46,7 @@ export default function App() {
       </header>
       <main id="main">
         <Hero />
+        <Weekly issue={__LATEST_DAILY_ISSUE__} />
         <Works />
         <Journey />
         <Next />

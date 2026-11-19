@@ -1,6 +1,5 @@
-import { ISSUES, TASKS, TYPES, KIT, WAYS, FRAMES, GLOSSARY } from './content.js';
+import { ARCHIVE, ISSUES, TASKS, TYPES, KIT, WAYS, FRAMES, GLOSSARY } from './content.js';
 
-const ARCHIVE = Object.values(ISSUES).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
 const LATEST = ARCHIVE[0];
 const MONTHS = [...new Set(ARCHIVE.map(issue=>issue.date.slice(0,7)))];
 const OCCURRENCES = { gif:[['creative','t-gif-1','最近的變化：讓圖片動起來']], storyboard:[['creative','t-sb-1','專家的做法']] };

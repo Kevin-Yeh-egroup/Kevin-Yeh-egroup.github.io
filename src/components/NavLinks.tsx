@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 
-type Item = { id: string; label: string }
+type Item = { id: string; label: string; dot?: boolean }
 
 // 選單：目前所在的區塊底下有一顆膠囊，捲動時滑到對應的項目（跟分段切換同一種手感）
 export function NavLinks({ items, active, className, label }: { items: Item[]; active: string | null; className: string; label: string }) {
@@ -29,6 +29,7 @@ export function NavLinks({ items, active, className, label }: { items: Item[]; a
       {items.map((n) => (
         <a key={n.id} href={`#${n.id}`} aria-current={active === n.id ? 'true' : undefined}>
           {n.label}
+          {n.dot && <span className="nav-dot" aria-hidden="true" />}
         </a>
       ))}
     </nav>

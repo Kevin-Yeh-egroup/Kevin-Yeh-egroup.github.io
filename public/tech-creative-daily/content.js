@@ -20,6 +20,8 @@ export const ISSUES={
   }
 };
 
+export const ARCHIVE = Object.values(ISSUES).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+
 function bodyCreative({ S, P, T, N, H, compare, board, srcTable, endBlock }){
   return S('sec-news','發生了什麼','來自官方公告','最近的變化',
     P('p-images',`<h3>11 月 4 日｜讓圖片動起來</h3><p>OpenAI 發表 Images 2.6，加入循環播放的動圖，用的是一種${T('gif','可做成動圖的圖片格式（GIF）','t-gif-1')}，並展示用簡單草圖發展角色動作。這讓草圖也能拿來試看動起來的效果。</p>`,N(SRC.images))+

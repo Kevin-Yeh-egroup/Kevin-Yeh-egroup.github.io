@@ -327,6 +327,16 @@ p {
   background: var(--card);
 }
 
+.nav-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-inline-start: 5px;
+  border-radius: 50%;
+  background: var(--yolk);
+  vertical-align: 3px;
+}
+
 .nav a[aria-current='true'],
 .dock a[aria-current='true'] {
   background: none;
@@ -641,6 +651,155 @@ p {
   flex-basis: 100%;
   color: var(--muted);
   font-size: clamp(17px, 1.6vw, 20px);
+}
+
+/* ───────── 科技與創作日報 ───────── */
+.weekly {
+  --weekly-ink: #e6f0ee;
+  --weekly-muted: #a7bbb8;
+  padding-block: clamp(44px, 6vw, 80px);
+  background: var(--night);
+  color: var(--weekly-ink);
+  overflow-wrap: anywhere;
+}
+
+.weekly-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+.weekly-band {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--weekly-ink);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--weekly-muted);
+}
+
+.weekly-band b {
+  color: var(--weekly-ink);
+}
+
+.weekly h2 {
+  margin-top: 14px;
+  font-size: var(--fs-h2);
+  line-height: 1.2;
+  text-wrap: wrap;
+}
+
+.weekly-latest {
+  display: grid;
+  gap: 6px;
+  margin-top: 22px;
+  color: var(--weekly-muted);
+  font-size: 15px;
+}
+
+.weekly-latest h3 {
+  color: var(--weekly-ink);
+  font: 400 var(--fs-h3) / 1.45 var(--font-body);
+}
+
+.weekly-kicker,
+.weekly-doors-label,
+.weekly-foot {
+  font-size: var(--fs-small);
+  color: var(--weekly-muted);
+}
+
+.weekly-copy {
+  margin-top: 14px;
+  color: var(--weekly-muted);
+  font-size: 15px;
+}
+
+.weekly-cta {
+  min-height: 50px;
+  margin-top: 22px;
+  padding: 8px 24px;
+  background: var(--mint);
+  color: var(--night);
+  font: 700 var(--fs-body) / 1.5 var(--font-body);
+  box-shadow: none;
+}
+
+.weekly-cta:hover {
+  background: color-mix(in srgb, var(--mint) 78%, white);
+  color: var(--night);
+  transform: none;
+}
+
+.weekly-doors-label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.weekly-doors {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.weekly-door {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 14px 10px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--weekly-ink);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--weekly-ink) 22%, transparent);
+  text-decoration: none;
+  line-height: 1.45;
+  transition: background-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+
+.weekly-door:hover {
+  background: color-mix(in srgb, var(--weekly-ink) 7%, transparent);
+  color: var(--weekly-ink);
+}
+
+.weekly-door:active {
+  transform: scale(0.98);
+}
+
+.weekly-door svg {
+  color: var(--mint);
+}
+
+.weekly-door-label {
+  display: block;
+  color: var(--weekly-muted);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+
+.weekly-foot {
+  margin-top: 18px;
+}
+
+.weekly a:focus-visible {
+  outline-color: var(--yolk);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly-cta,
+  .weekly-door {
+    transition: none;
+  }
+
+  .weekly-cta:active,
+  .weekly-door:active {
+    transform: none;
+  }
 }
 
 /* ───────── 作品：便當格 ───────── */
@@ -3140,7 +3299,8 @@ p {
 
 /* ───────── 平板 ───────── */
 @media (max-width: 959px) {
-  .hero-grid {
+  .hero-grid,
+  .weekly-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -3227,8 +3387,12 @@ p {
   }
 
   .dock a {
-    padding: 8px 14px;
+    padding: 8px clamp(4px, calc((100vw - 290px) / 8), 11px);
     font-size: 15px;
+  }
+
+  .weekly a {
+    scroll-margin-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
 
   .dock .nav-thumb {
