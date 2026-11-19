@@ -61,7 +61,7 @@ function DarkTheme({ children }: { children: ReactNode }) {
 export const Dark: StoryObj<typeof meta> = {
   decorators: [(Story) => <DarkTheme><Story /></DarkTheme>],
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('region', { name: '科技與創作日報' })).toHaveStyle({ backgroundColor: 'rgb(15, 30, 33)' })
+    await expect(canvas.getByRole('region', { name: '科技與創作日報' })).toHaveStyle({ backgroundColor: 'rgb(22, 43, 47)' })
     await expect(canvas.getByRole('link', { name: '讀最新一期' })).toBeVisible()
   },
 }
