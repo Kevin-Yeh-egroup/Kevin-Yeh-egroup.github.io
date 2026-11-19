@@ -81,6 +81,7 @@ svg{display:block}
 /* 首頁主視覺 */
 .hero{padding-block:clamp(32px,5.5vw,76px) clamp(40px,6vw,88px)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,68px);align-items:center}
+.hero-text{max-width:760px}
 .hero h1{margin-top:16px}
 .hero .deck{margin-top:20px;max-width:30em;color:var(--muted)}
 .hero .btns{margin-top:28px}
@@ -200,6 +201,7 @@ legend{padding:0;font-weight:700;margin-bottom:8px}
 .done>*+*{margin-top:14px}
 .copybox{position:relative;background:var(--tint);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px}
 .copybox pre{margin:0;white-space:pre-wrap;font:var(--fs-small)/1.75 ui-monospace,'Cascadia Mono',Consolas,var(--font-body)}
+.copybox .copy-text{margin-bottom:12px}
 details>summary{cursor:pointer}
 .more{border:1px solid var(--line);border-radius:var(--radius-sm)}
 .more>summary{padding:12px 16px;font-weight:700;min-height:48px}

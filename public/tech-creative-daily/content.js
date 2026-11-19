@@ -1,3 +1,5 @@
+import { weekly2026w47 } from './issues/weekly-2026-w47.js';
+
 // 已確認公開的期刊、可用素材與做法。草稿保存在網站專案之外。
 const SRC={
   images:{name:'OpenAI 發布公告',url:'https://openai.com/index/introducing-images-2-6/',date:'11 月 4 日'},
@@ -6,13 +8,15 @@ const SRC={
 };
 
 export const ISSUES={
+  [weekly2026w47.id]:weekly2026w47,
   creative:{id:'creative',code:'TD-2026-11-19-C',date:'2026-11-19',kind:'創作',label:'試刊',edition:1,checkedAt:'2026-11-19',short:'15 秒動畫',read:'約 5 分鐘',
     title:'一段 15 秒的動畫，能把活動流程講清楚嗎？',
     deck:'活動頁明明寫了報名後要做什麼，讀者卻可能找不到。這一期用一個假想頁面，看看一張圖、十幾秒的動畫和一支短片，各自能幫上什麼忙。',
     one:'先用簡單畫面確認讀者看得懂，再決定要做圖卡、動圖還是影片。',
     secs:[['sec-news','最近的變化','兩個工具更新，讓人更容易先試一小段畫面。'],['sec-expert','專家的做法','動畫團隊怎麼用草圖決定觀眾先看哪裡。'],['sec-ai','AI 的參謀建議','圖卡、動圖、影片，依讀者卡住的地方選。'],['sec-practice','15 分鐘練習','畫三格，拿給一個人看。'],['sec-keep','帶走什麼','可重用的順序、來源與使用前的提醒。']],
     body:bodyCreative,
-    storyboard:true
+    storyboard:true,
+    glossaryLinks:true
   }
 };
 

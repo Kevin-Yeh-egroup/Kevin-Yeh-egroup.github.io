@@ -28,7 +28,7 @@ const longD=d=>{const o=parseD(d);return `${o.getFullYear()}/${o.getMonth()+1}/$
 const taskName=id=>(TASKS.find(t=>t[0]===id)||[])[1]||'';
 const ui={way:'card',open:new Set(),tpl:FRAMES.map(f=>({scene:f.scene,cap:f.cap}))};
 const kitFilter=q=>{const task=q.get('task'),type=q.get('type'),s=norm(q.get('q'));return KIT.filter(k=>(!task||k.tasks.includes(task))&&(!type||k.type===type)&&(!s||norm([k.title,k.sum,k.kw,k.type,...k.tasks.map(taskName)].join(' ')).includes(s)))};
-const arcFilter=q=>{const d=q.get('date'),kind=q.get('kind'),s=norm(q.get('q'));return ARCHIVE.filter(a=>(!d||a.date===d)&&(!kind||a.kind===kind)&&(!s||norm(a.title+a.kind+md(a.date)).includes(s)))};
+const arcFilter=q=>{const d=q.get('date'),kind=q.get('kind'),s=norm(q.get('q'));return ARCHIVE.filter(a=>(!d||a.date===d)&&(!kind||a.kind===kind)&&(!s||norm([a.title,a.kind,md(a.date),a.keywords].join(' ')).includes(s)))};
 /* 短英文（PR、AI、UI）只比對完整單字，避免 PR 誤中 Preview；也能用讀者的原話（太擠）找 */
 const termHit=(text,n,short)=>short?String(text||'').normalize('NFKC').toLowerCase().split(/[^a-z0-9]+/).includes(n):norm(text).includes(n);
 const termMatch=s=>{const n=norm(s);if(!n)return TERMS.map(t=>({t}));const short=/^[a-z0-9]{1,3}$/.test(n),out=[];TERMS.forEach(t=>{if(termHit(t.term,n,short)||termHit(t.plain,n,short)){out.push({t});return}const a=[...t.alias,t.feel].find(x=>x&&termHit(x,n,short));if(a)out.push({t,via:a})});return out};
@@ -56,7 +56,7 @@ const board=(scene)=>`<ol class="board" data-testid="storyboard">${FRAMES.map((f
 function vHome(){
   const c=LATEST;
   const quick=[['intro','我要介紹功能'],['anim','我要做動畫'],['video','我要拍教學短片']];
-  return `<section class="hero wrap"><div class="hero-grid"><div>
+  return `<section class="hero wrap"><div class="${c.storyboard?'hero-grid':'hero-text'}"><div>
     <p class="kicker"><b>最新一期</b><span>${longD(c.date)}</span><span>${c.kind}篇</span>${c.label?`<span class="tag">${esc(c.label)}</span>`:''}<span>${c.read}</span></p>
     <h1 tabindex="-1">${esc(c.title).replace('15 秒的動畫，','<span class="hero-phrase">15 秒的動畫，</span>').replace('活動流程','<span class="hero-phrase">活動流程</span>')}</h1>
     <p class="deck">${c.deck}</p>
@@ -82,7 +82,8 @@ const T=(id,text,key)=>`<a class="term" id="${key}" data-term="${id}" data-testi
 const N=s=>`<aside class="note" aria-label="來源"><span>來源</span><a data-testid="source-link" href="${s.url}" target="_blank" rel="noopener noreferrer">${esc(s.name)}${ic('ext')}<i class="sr">（開新分頁）</i></a><span>${esc(s.date)}</span></aside>`;
 const P=(id,inner,note='')=>`<div class="para" ${id?`id="${id}" tabindex="-1"`:''}><div>${inner}</div>${note}</div>`;
 const V=(tag,txt)=>`<p class="voice"><span class="tag">${tag}</span>${txt?`<span>${txt}</span>`:''}</p>`;
-const S=(id,tag,txt,title,body)=>`<section id="${id}" aria-labelledby="${id}-h">${V(tag,txt)}<h2 id="${id}-h" tabindex="-1">${title}</h2>${body}</section>`;
+const S=(id,tag,txt,title,body)=>`<section id="${id}" aria-labelledby="${id}-h">${tag?V(tag,txt):''}<h2 id="${id}-h" tabindex="-1">${title}</h2>${body}</section>`;
+const copyBox=(id,text)=>`<div class="copybox lim"><p class="copy-text" id="${id}">${esc(text)}</p><div class="btns"><button class="btn btn-s" data-copy="${id}" data-testid="copy-${id}">${ic('copy')}複製指令</button></div></div>`;
 const srcTable=rows=>`<table class="srcs"><caption class="sr">來源與採用狀態</caption><thead><tr><th>出處</th><th>來源查核</th><th>採用審查</th></tr></thead><tbody>${rows.map(([s,c,a])=>`<tr><th scope="row"><a class="lnk" style="display:inline" href="${s.url}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a></th><td data-l="來源查核">${c}</td><td data-l="採用審查">${a}</td></tr>`).join('')}</tbody></table>`;
 const compare=()=>`<fieldset><legend>你的讀者卡在哪裡？</legend><div class="opts">${WAYS.map(w=>`<label class="opt"><input type="radio" name="way" value="${w.id}" data-testid="compare-${w.id}" ${ui.way===w.id?'checked':''}><span>${w.opt}</span></label>`).join('')}</div></fieldset>
   <div class="ways">${WAYS.map(w=>`<article class="way ${ui.way===w.id?'on':''}" data-way="${w.id}"><span class="pick"><b>先試這個</b></span><h3>${w.name}</h3><dl><dt>適用情境</dt><dd>${w.when}</dd><dt>製作投入</dt><dd>${w.costT}<span class="cost" aria-hidden="true">${[1,2,3].map(n=>`<i class="${n<=w.cost?'f':''}"></i>`).join('')}</span></dd></dl></article>`).join('')}</div>`;
@@ -92,12 +93,12 @@ function vIssue(id,r){
   if(!Object.hasOwn(ISSUES,id))return vMissing();
   const toc=it.secs.map(s=>`<a href="${H('/issue/'+id,{at:s[0],from})}" data-sec="${s[0]}">${s[1]}</a>`).join('');
   const hero=it.storyboard?`<figure class="plate" style="margin-top:26px">${board()}<figcaption>三格示意分鏡。活動報名頁為情境範例。</figcaption></figure>`:'';
-  const body=it.body({ S, P, T, N, H, compare, board, srcTable, endBlock });
+  const body=it.body({ S, P, T, N, H, compare, board, srcTable, endBlock, copyBox });
   return `<div class="wrap ${from?'has-ret':''}">${ret(from)}
     <header class="ihead"><p class="kicker"><b>${longD(it.date)}</b><span>${it.kind}篇</span>${it.label?`<span class="tag">${esc(it.label)}</span>`:''}<span>${it.read}</span></p>
       <h1 tabindex="-1" data-testid="issue-title">${it.title}</h1><p class="deck">${it.deck}</p>
       <p class="one"><span>這期的一句話</span><strong>${it.one}</strong></p>${hero}
-      <p class="imeta"><span>編號 ${it.code}</span><span>版次 v${it.edition}</span><span>查核 ${it.checkedAt}</span><span>文中有虛線的詞可以點開看解釋</span></p></header>
+      <p class="imeta">${it.period?`<span>${esc(it.period)}</span>`:''}<span>編號 ${it.code}</span><span>版次 v${it.edition}</span><span>查核 ${it.checkedAt}</span>${it.glossaryLinks?'<span>文中有虛線的詞可以點開看解釋</span>':''}</p></header>
     <details class="more toc-m"><summary>本期目錄</summary><div class="rail" style="display:block;position:static">${toc}</div></details>
     <div class="art"><nav class="rail" aria-label="本期目錄"><p>本期目錄</p>${toc}</nav><article class="flow">${body}</article></div></div>`;
 }
@@ -139,7 +140,7 @@ function vArchive(r){
   const q=r.q,kind=q.get('kind')||'';
   return `<div class="wrap"><header class="phead"><h1 tabindex="-1">往期</h1><p>記得大概哪一天，從日期找。記得內容，直接打關鍵字。</p></header>
   <div class="arc"><div class="side"><div id="arc-cal">${calHTML(q)}</div><p class="legend"><span><i></i>有出刊</span></p></div>
-  <div><div class="kit-f"><label class="search"><span class="sr">搜尋文章標題</span>${ic('s')}<input class="inp" type="search" data-filter="archive" data-testid="arc-search" placeholder="搜尋標題，例如：動畫" value="${esc(q.get('q')||'')}" autocomplete="off"></label>
+  <div><div class="kit-f"><label class="search"><span class="sr">搜尋往期</span>${ic('s')}<input class="inp" type="search" data-filter="archive" data-testid="arc-search" placeholder="輸入關鍵字，例如：動畫" value="${esc(q.get('q')||'')}" autocomplete="off"></label>
   <div class="chips" role="group" aria-label="類型">${[['','全部'],...Array.from(new Set(ARCHIVE.map(issue=>issue.kind)),kind=>[kind,kind])].map(([v,l])=>`<button class="chip" data-kind="${v}" aria-pressed="${kind===v}">${l}</button>`).join('')}</div></div>
   <div class="bar-r" id="arc-bar">${arcCount(q)}</div><div class="ml" id="arc-res">${arcResults(q)}</div></div></div></div>`;
 }
